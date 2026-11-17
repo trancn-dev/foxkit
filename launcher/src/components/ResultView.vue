@@ -48,7 +48,7 @@ watch(streamLines, () => nextTick(() => logEl.value && (logEl.value.scrollTop = 
       <pre v-if="r.detail" class="pre">{{ r.detail }}</pre>
       <div class="row">
         <button v-if="r.canAdmin && r.args" class="btn" @click="session.rerun(item, r.args!, true)">Chạy lại với quyền admin</button>
-        <button class="btn" title="Xóa toàn bộ nội dung chat" @click="session.clearChat()">Xóa chat</button>
+        <button class="btn" title="Xóa lệnh này khỏi chat" @click="session.removeItem(item.id)">Xóa</button>
       </div>
     </template>
 
@@ -91,7 +91,7 @@ watch(streamLines, () => nextTick(() => logEl.value && (logEl.value.scrollTop = 
         <button v-if="okData.dryRun && okData.applyArgs" class="btn primary" title="Ctrl+Enter" @click="session.rerun(item, okData.applyArgs!, false)">Áp dụng</button>
         <button v-if="copyable" class="btn" @click="copy">{{ copied ? "Đã copy" : "Copy" }}</button>
         <button class="btn" @click="showJson = !showJson">JSON</button>
-        <button class="btn" title="Xóa toàn bộ nội dung chat" @click="session.clearChat()">Xóa chat</button>
+        <button class="btn" title="Xóa lệnh này khỏi chat" @click="session.removeItem(item.id)">Xóa</button>
       </div>
     </template>
   </div>

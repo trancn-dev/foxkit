@@ -111,10 +111,12 @@ export function ghost(input: string, commands: Command[], ctx: GhostCtx): Ghost 
 }
 
 /** Ví dụ mờ phía trên ô nhập (launcher.md 6.4 bước 7). `pick` để test được tính ngẫu nhiên. */
-export function exampleFor(input: string, commands: Command[], pick: (n: number) => number = (n) => Math.floor(Math.random() * n)): Example | null {
+export function exampleFor(input: string, commands: Command[], pick: (n: number) => number = (n) => Math.floor(Math.random() * n), preferred: string[] = []): Example | null {
   const { tokens } = tokenize(input);
   if (tokens.length === 0) {
-    const all = commands.flatMap((c) => c.examples ?? []);
+    // app đang focus có bộ lệnh riêng (vd. trình duyệt) thì chỉ lấy ví dụ trong bộ đó
+    const mine = commands.filter((c) => preferred.includes(c.name)).flatMap((c) => c.examples ?? []);
+    const all = mine.length ? mine : commands.flatMap((c) => c.examples ?? []);
     return all.length ? all[pick(all.length)] : null;
   }
   const found = findCommand(tokens, commands);

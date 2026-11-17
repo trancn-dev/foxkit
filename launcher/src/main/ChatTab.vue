@@ -32,7 +32,10 @@ defineExpose({ focus: () => composer.value?.focus() });
   <div class="chat">
     <div class="chat-head">
       <span class="dim">Chat lệnh — dùng chung với ô nhanh ({{ session.config.value.hotkey }})</span>
-      <button class="btn small" @click="shrink">Thu nhỏ</button>
+      <span class="head-actions">
+        <button class="btn small" title="Xóa toàn bộ nội dung chat" @click="session.clearChat()">Xóa chat</button>
+        <button class="btn small" @click="shrink">Thu nhỏ</button>
+      </span>
     </div>
     <div ref="list" class="thread full">
       <div v-if="!session.items.value.length" class="dim empty">Chưa có lệnh nào. Gõ <code>uuid</code> hoặc <code>port --list</code> ở ô bên dưới.</div>

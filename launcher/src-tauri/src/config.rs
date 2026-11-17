@@ -2,6 +2,14 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use std::path::{Path, PathBuf};
 
+/// Gợi ý riêng cho một app: tên exe (vd. `chrome.exe`) và các lệnh hiện sẵn khi mở ô nhanh lúc app đó đang focus.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Default)]
+#[serde(default)]
+pub struct AppHint {
+    pub app: String,
+    pub commands: Vec<String>,
+}
+
 /// `%APPDATA%\foxkit-launcher\config.json` (launcher.md 5.1).
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(rename_all = "camelCase", default)]
@@ -12,6 +20,8 @@ pub struct Config {
     pub auto_copy: bool,
     pub context: bool,
     pub folders: Vec<String>,
+    /// Gợi ý theo app (mặc định rỗng = không gợi ý gì).
+    pub app_hints: Vec<AppHint>,
     /// Field lạ do người dùng tự thêm: giữ nguyên khi ghi lại.
     #[serde(flatten)]
     pub extra: Map<String, Value>,
@@ -26,6 +36,7 @@ impl Default for Config {
             auto_copy: false,
             context: true,
             folders: Vec::new(),
+            app_hints: Vec::new(),
             extra: Map::new(),
         }
     }
@@ -155,6 +166,21 @@ mod tests {
         assert!(c.context && c.autostart);
         save(&d, &c).unwrap();
         assert!(std::fs::read_to_string(config_path(&d)).unwrap().contains("\"mine\": 42"));
+    }
+
+    #[test]
+    fn app_hints_default_empty_and_roundtrip() {
+        let d = tmp("cfg-hints");
+        std::fs::create_dir_all(&d).unwrap();
+        std::fs::write(config_path(&d), r#"{"hotkey":"Ctrl+Alt+K"}"#).unwrap();
+        let (mut c, _) = load(&d);
+        assert!(c.app_hints.is_empty());
+        c.app_hints.push(AppHint { app: "chrome.exe".into(), commands: vec!["http".into(), "dns".into()] });
+        save(&d, &c).unwrap();
+        let (back, warn) = load(&d);
+        assert!(warn.is_none());
+        assert_eq!(back.app_hints, c.app_hints);
+        assert!(std::fs::read_to_string(config_path(&d)).unwrap().contains("\"appHints\""));
     }
 
     #[test]

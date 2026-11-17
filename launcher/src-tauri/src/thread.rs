@@ -46,6 +46,11 @@ impl Thread {
         }
     }
 
+    /// Xóa đúng một mục theo id; id không tồn tại thì bỏ qua.
+    pub fn remove(&self, id: u32) {
+        self.inner.lock().unwrap().1.retain(|x| x.id != id);
+    }
+
     pub fn clear(&self) {
         self.inner.lock().unwrap().1.clear();
     }
@@ -80,5 +85,17 @@ mod tests {
         assert_eq!((l[0].id, l[0].status.as_str()), (id, "done"));
         t.clear();
         assert!(t.list().is_empty());
+    }
+
+    #[test]
+    fn remove_deletes_only_that_item() {
+        let t = Thread::default();
+        let a = t.add(item("a"));
+        let b = t.add(item("b"));
+        t.remove(a);
+        t.remove(999);
+        let l = t.list();
+        assert_eq!(l.len(), 1);
+        assert_eq!(l[0].id, b);
     }
 }

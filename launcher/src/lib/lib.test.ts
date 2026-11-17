@@ -176,6 +176,7 @@ describe("thread", () => {
       list: async () => items.slice(),
       add: async (it) => { items.push({ ...it, id: items.length + 1 }); subs.forEach((f) => f()); return items.length; },
       update: async (id, it) => { items = items.map((x) => (x.id === id ? it : x)); subs.forEach((f) => f()); },
+      remove: async (id) => { items = items.filter((x) => x.id !== id); subs.forEach((f) => f()); },
       clear: async () => { items = []; subs.forEach((f) => f()); },
       onChanged: async (cb) => { subs.push(cb); return () => {}; },
     };
@@ -187,6 +188,10 @@ describe("thread", () => {
     await s.finish(id, "uuid", "done", { ok: true });
     await new Promise((r) => setTimeout(r, 0));
     expect(s.items[0]).toMatchObject({ status: "done", result: { ok: true } });
+    const id2 = await s.begin("pass");
+    await s.remove(id);
+    await new Promise((r) => setTimeout(r, 0));
+    expect(s.items.map((x) => x.id)).toEqual([id2]); // xóa một mục, mục kia còn
     await s.clear();
     await new Promise((r) => setTimeout(r, 0));
     expect(s.items).toEqual([]);
@@ -199,5 +204,29 @@ describe("manifest", () => {
   });
   it("không phải manifest → MANIFEST_FAILED", () => {
     expect(() => normalizeManifest(null)).toThrowError(expect.objectContaining({ code: "MANIFEST_FAILED" }));
+  });
+});
+
+describe("appcmds", () => {
+  it("mặc định (chưa cấu hình) không gợi ý gì; cấu hình theo tên exe, không phân biệt hoa thường", async () => {
+    const { preferredFor, exeName } = await import("./appcmds");
+    const chrome = String.raw`C:\Program Files\Google\Chrome\Application\chrome.exe`;
+    expect(preferredFor(chrome)).toEqual([]);
+    const hints = [{ app: "Chrome", commands: ["http", "dns"] }, { app: "msedge.exe", commands: ["jwt"] }];
+    expect(preferredFor(chrome, hints)).toEqual(["http", "dns"]);
+    expect(preferredFor(String.raw`C:\x\MSEDGE.EXE`, hints)).toEqual(["jwt"]);
+    expect(preferredFor(String.raw`C:\Windows\notepad.exe`, hints)).toEqual([]);
+    expect(preferredFor("", hints)).toEqual([]);
+    expect(exeName(String.raw`C:\a\Code.exe`)).toBe("code.exe");
+    expect(exeName("")).toBe("");
+  });
+});
+
+describe("exampleFor theo app", () => {
+  it("ô trống + app có bộ lệnh riêng → ví dụ chỉ từ bộ đó", () => {
+    const withEx = (name: string, cmd: string) => ({ ...cmds.find((c) => c.name === "port")!, name, examples: [{ cmd, desc: "" }] });
+    const list = [withEx("http", "http example.com"), withEx("zip", "zip pack @dir")];
+    expect(exampleFor("", list, () => 0, ["http", "dns"])?.cmd).toBe("http example.com");
+    expect(exampleFor("", list, () => 1, [])?.cmd).toBe("zip pack @dir");
   });
 });

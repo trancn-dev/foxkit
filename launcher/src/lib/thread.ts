@@ -29,6 +29,7 @@ export interface ThreadBackend {
   list(): Promise<ThreadItem[]>;
   add(item: ThreadItem): Promise<number>;
   update(id: number, item: ThreadItem): Promise<void>;
+  remove(id: number): Promise<void>;
   clear(): Promise<void>;
   /** Đăng ký nhận sự kiện `thread-changed`; trả hàm hủy. */
   onChanged(cb: () => void): Promise<() => void>;
@@ -67,6 +68,10 @@ export class ThreadStore {
 
   async finish(id: number, line: string, status: "done" | "error", result: unknown): Promise<void> {
     await this.backend.update(id, { id, line, status, result, ts: Date.now() });
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.backend.remove(id);
   }
 
   async clear(): Promise<void> {

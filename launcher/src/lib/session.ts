@@ -9,6 +9,7 @@ import { normalizeManifest, type Command, type Example, type Manifest } from "./
 import { expand, type ContextError } from "./placeholders";
 import { childrenOf, findCommand, parseLine, syntax, toArgs, type ArgError, type ParsedLine } from "./resolve";
 import { search } from "./fuzzy";
+import { preferredFor, type AppHint } from "./appcmds";
 import { ThreadStore, quickView, type ThreadBackend, type ThreadItem } from "./thread";
 import { quoteToken, tokenize } from "./tokenize";
 
@@ -28,6 +29,7 @@ export interface AppConfig {
   autoCopy: boolean;
   context: boolean;
   folders: string[];
+  appHints: AppHint[];
 }
 
 export interface AppError {
@@ -67,6 +69,7 @@ const backend: ThreadBackend = {
   list: () => invoke<ThreadItem[]>("thread_list"),
   add: (item) => invoke<number>("thread_add", { item }),
   update: (id, item) => invoke<void>("thread_update", { id, item }),
+  remove: (id) => invoke<void>("thread_remove", { id }),
   clear: () => invoke<void>("thread_clear"),
   onChanged: (cb) => listen("thread-changed", cb),
 };
@@ -87,7 +90,7 @@ interface ExecInfo {
 export class Session {
   manifest = shallowRef<Manifest | null>(null);
   loadError = ref<AppError | null>(null);
-  config = ref<AppConfig>({ hotkey: "Ctrl+Alt+Space", foxkitPath: "", autostart: true, autoCopy: false, context: true, folders: [] });
+  config = ref<AppConfig>({ hotkey: "Ctrl+Alt+Space", foxkitPath: "", autostart: true, autoCopy: false, context: true, folders: [], appHints: [] });
   ctx = ref<Ctx>(NO_CTX);
   clip = ref<string | null>(null);
   prompt = ref<Prompt | null>(null);
@@ -140,11 +143,15 @@ export class Session {
     return ghost(input, this.commands.value, { dir: this.ctx.value.dir, files: this.ctx.value.files, clip: this.clip.value });
   }
   exampleFor(input: string, pick?: (n: number) => number): Example | null {
-    return exampleFor(input, this.commands.value, pick);
+    return exampleFor(input, this.commands.value, pick, preferredFor(this.ctx.value.exe, this.config.value.appHints));
   }
   suggestions(input: string): Command[] {
     const { tokens, trailingSpace } = tokenize(input);
-    if (tokens.length === 0) return this.commands.value.slice(0, 8);
+    if (tokens.length === 0) {
+      // Ô trống: giữ ô nhanh gọn, trừ khi app đang focus có bộ lệnh riêng (vd. trình duyệt).
+      const names = preferredFor(this.ctx.value.exe, this.config.value.appHints);
+      return names.map((n) => this.commands.value.find((c) => c.name === n)).filter((c): c is Command => !!c);
+    }
     if (findCommand(tokens, this.commands.value) && (trailingSpace || tokens.length > 1)) return [];
     const kids = childrenOf(tokens, this.commands.value);
     return kids.length ? kids.slice(0, 8) : search(tokens.join(" "), this.commands.value, 8);
@@ -311,6 +318,11 @@ export class Session {
   async stop(): Promise<void> {
     const id = this.busy.value?.runId;
     if (id) await invoke("stop", { runId: id });
+  }
+
+  /** Xóa đúng một mục khỏi luồng chat. */
+  removeItem(id: number): Promise<void> {
+    return this.store.remove(id);
   }
 
   /** Xóa toàn bộ luồng chat ở cả hai cửa sổ (cùng việc với lệnh `:clear`). */

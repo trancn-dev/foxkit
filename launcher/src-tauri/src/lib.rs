@@ -235,6 +235,12 @@ fn thread_update(app: AppHandle, t: State<'_, Thread>, id: u32, item: ThreadItem
 }
 
 #[tauri::command]
+fn thread_remove(app: AppHandle, t: State<'_, Thread>, id: u32) {
+    t.remove(id);
+    let _ = app.emit("thread-changed", ());
+}
+
+#[tauri::command]
 fn thread_clear(app: AppHandle, t: State<'_, Thread>) {
     t.clear();
     let _ = app.emit("thread-changed", ());
@@ -306,7 +312,7 @@ pub fn start() {
         .manage(ContextState::default())
         .manage(app::Ui::default())
         .invoke_handler(tauri::generate_handler![
-            load_manifest, run, run_stream, stop, run_elevated, get_config, get_context, thread_list, thread_add, thread_update, thread_clear,
+            load_manifest, run, run_stream, stop, run_elevated, get_config, get_context, thread_list, thread_add, thread_update, thread_remove, thread_clear,
             scan, add_folder, forget_folder, folders_info, scan_log, trust_check, trust_allow,
             hide_window, show_main, show_bar, suspend_autohide, save_config, check_foxkit
         ])

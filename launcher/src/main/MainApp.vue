@@ -5,6 +5,7 @@ import { onMounted, ref } from "vue";
 import { Session } from "../lib/session";
 import ChatTab from "./ChatTab.vue";
 import CommandsTab from "./CommandsTab.vue";
+import AppsTab from "./AppsTab.vue";
 import FoldersTab from "./FoldersTab.vue";
 import SettingsTab from "./SettingsTab.vue";
 
@@ -12,6 +13,7 @@ const TABS = [
   { id: "chat", name: "Chat" },
   { id: "commands", name: "Lệnh" },
   { id: "folders", name: "Thư mục lệnh" },
+  { id: "apps", name: "Ứng dụng" },
   { id: "settings", name: "Cài đặt" },
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
@@ -60,6 +62,7 @@ onMounted(async () => {
       <ChatTab v-show="tab === 'chat'" ref="chat" :session="session" />
       <CommandsTab v-if="tab === 'commands'" :session="session" />
       <FoldersTab v-if="tab === 'folders'" :session="session" />
+      <AppsTab v-if="tab === 'apps'" :session="session" />
       <SettingsTab v-if="tab === 'settings'" :session="session" />
     </main>
   </div>

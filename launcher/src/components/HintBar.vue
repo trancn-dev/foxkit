@@ -5,13 +5,13 @@ import type { Ctx } from "../lib/session";
 
 const props = defineProps<{ ctx: Ctx; example: Example | null; syntax: string | null }>();
 
-/** Cắt giữa đường dẫn quá dài; tooltip là đường dẫn đầy đủ. */
-function middle(s: string, max = 42): string {
-  return s.length <= max ? s : `${s.slice(0, 14)}…${s.slice(s.length - (max - 15))}`;
+/** Chỉ lấy tên thư mục cuối cho gọn, giống nhau ở mọi app; tooltip là đường dẫn đầy đủ. */
+function leaf(s: string): string {
+  return s.replace(/[\\/]+$/, "").split(/[\\/]/).pop() || s;
 }
 const chip = computed(() => {
   if (props.ctx.source === "none" || !props.ctx.app) return null;
-  return { text: props.ctx.dir ? `${props.ctx.app} · ${middle(props.ctx.dir)}` : props.ctx.app, title: props.ctx.dir ?? props.ctx.title };
+  return { text: props.ctx.dir ? `${props.ctx.app} · ${leaf(props.ctx.dir)}` : props.ctx.app, title: props.ctx.dir ?? props.ctx.title };
 });
 </script>
 
