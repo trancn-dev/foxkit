@@ -478,6 +478,33 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "zip pack", "title": "Nén ZIP", "description": "Nén thư mục/file, tự bỏ node_modules, .git, .env", "category": "life",
+      "args": [ { "name": "src", "type": "file", "allowDir": true, "required": true, "multiple": true, "label": "Nguồn" } ],
+      "flags": [
+        { "name": "out", "type": "string", "label": "File zip đầu ra" },
+        { "name": "exclude", "type": "list", "label": "Loại thêm" },
+        { "name": "no-default-excludes", "type": "bool", "default": false, "label": "Không tự loại .git/node_modules/.env" },
+        { "name": "level", "type": "int", "default": 6, "min": 0, "max": 9, "label": "Mức nén" },
+        { "name": "force", "type": "bool", "default": false, "label": "Ghi đè" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "zip pack @dir", "desc": "Nén dự án đang mở (tự bỏ node_modules, .git, .env)" } ]
+    },
+    {
+      "name": "zip unpack", "title": "Giải nén ZIP", "description": "Giải nén file zip an toàn", "category": "life",
+      "args": [ { "name": "file", "type": "file", "required": true, "label": "File zip" } ],
+      "flags": [
+        { "name": "to", "type": "dir", "label": "Giải nén vào" },
+        { "name": "force", "type": "bool", "default": false, "label": "Ghi đè" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv"
+    },
+    {
+      "name": "zip list", "title": "Xem nội dung ZIP", "description": "Liệt kê file trong zip", "category": "life",
+      "args": [ { "name": "file", "type": "file", "required": true, "label": "File zip" } ],
+      "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
       "name": "down", "title": "Tải file", "description": "Tải file từ URL, tiếp tục khi đứt, kiểm tra checksum", "category": "life",
       "args": [ { "name": "url", "type": "string", "required": true, "label": "URL" } ],
       "flags": [
