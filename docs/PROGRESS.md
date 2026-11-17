@@ -11,9 +11,17 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] enc — (cùng commit với hash). `ENC_INPUT_TOO_LARGE` dùng chung `output.InputTooLarge` rồi đổi code.
 - [x] ts — ad82327. Spec sửa: ví dụ output của `1763287727` là 2025-11-16 (Chủ Nhật), không phải 2026. **Chưa kiểm** trên máy không cài Go: thử copy `foxkit.exe` sang máy khác rồi `foxkit ts 0 --tz Asia/Ho_Chi_Minh` (đã nhúng `time/tzdata`).
 - [x] case — (cùng commit với ts). `kebab` và `slug` khác nhau ở chỗ slug chỉ giữ `a-z0-9`.
-- [x] port — (commit "port, env"). Đã thử thật trên listener tự tạo: find/json/kill/trống đều đúng; port 445 → `PORT_SYSTEM_PROCESS`. Lệch spec nhỏ: `List` gọi `tasklist` một lần cho mọi PID thay vì mỗi PID một lần. **Chưa kiểm**: `NEED_ADMIN` (kill process của user khác/service) — thử `.\foxkit port 3306 --kill` khi MySQL chạy dưới service mà terminal không admin.
+- [x] port — a20367c. Đã thử thật trên listener tự tạo: find/json/kill/trống đều đúng; port 445 → `PORT_SYSTEM_PROCESS`. Lệch spec nhỏ: `List` gọi `tasklist` một lần cho mọi PID thay vì mỗi PID một lần. **Chưa kiểm**: `NEED_ADMIN` (kill process của user khác/service) — thử `.\foxkit port 3306 --kill` khi MySQL chạy dưới service mà terminal không admin.
 - [x] env — (cùng commit với port). Có `ParseError` (kèm số dòng), `Set`/`WriteTo` giữ nguyên byte (kể cả CRLF) cho `lara key` ở GĐ5. **Chưa kiểm** trên dự án Laravel thật: `.\foxkit env diff D:\Projects\<dự-án>`.
-- [ ] L1 launcher (nhiều commit nhỏ theo mục 4, 5, 6.x, 7, 8)
+- [ ] L1 launcher (nhiều commit nhỏ). Môi trường: MSVC Build Tools ở `D:\VS\BuildTools`, npm/cargo có mạng. Tauri chọn `2.x` (crate mới nhất trên crates.io là 3.0 alpha, spec chốt v2).
+  - [x] L1.0 khung — commit "launcher: scaffold". Windows crate 0.62, sha2 0.11 (cargo chọn bản mới nhất tương thích). Icon tạm sinh từ chữ "fx" (thay bằng icon thật sau).
+  - [ ] L1.1 lib TS thuần + vitest (tokenize, resolve, fuzzy, ghost, placeholders, form, thread)
+  - [ ] L1.2 Rust: config, runner (run/stream/stop), elevate
+  - [ ] L1.3 Rust: context (focus, Explorer COM, VS Code)
+  - [ ] L1.4 Rust: scan (+ schema JSON, trusted, scan-cache)
+  - [ ] L1.5 UI ô nhanh (App.vue, Composer, Suggestions, ArgHint, HintBar, ResultView) + thread chung
+  - [ ] L1.6 UI giao diện chính 4 tab
+  - [ ] L1.7 lib.rs: tray, hotkey, single-instance, autostart, hai cửa sổ; build `tauri build`
 - [ ] GĐ2: size · dup · rename · find · temp · prune · todo
 - [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi
 - [ ] GĐ4: json · jwt · http · tcp · serve
