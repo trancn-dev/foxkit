@@ -10,6 +10,21 @@
       "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "createpw", "title": "Tạo mật khẩu", "description": "Mật khẩu 16 ký tự A-Z a-z 0-9 ký hiệu, bắt đầu bằng chữ hoa, có thể copy", "category": "dev",
+      "args": [],
+      "flags": [
+        { "name": "len", "type": "int", "default": 16, "min": 4, "max": 256, "label": "Độ dài" },
+        { "name": "count", "type": "int", "default": 1, "min": 1, "max": 100, "label": "Số lượng" },
+        { "name": "no-ambiguous", "type": "bool", "default": false, "label": "Bỏ ký tự dễ nhầm" },
+        { "name": "copy", "type": "bool", "default": false, "label": "Copy vào clipboard" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "text",
+      "examples": [
+        { "cmd": "createpw --copy", "desc": "Mật khẩu 16 ký tự, copy sẵn vào clipboard" },
+        { "cmd": "createpw --len 20 --count 3", "desc": "3 mật khẩu 20 ký tự" }
+      ]
+    },
+    {
       "name": "uuid", "title": "Sinh UUID", "description": "Sinh UUID v4 hoặc v7", "category": "dev",
       "args": [],
       "flags": [

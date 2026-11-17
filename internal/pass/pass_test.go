@@ -49,3 +49,20 @@ func TestBadCharsetAndEntropy(t *testing.T) {
 		t.Fatalf("got %v", got)
 	}
 }
+
+func TestGenerateStartUpper(t *testing.T) {
+	for _, noAmb := range []bool{false, true} {
+		for i := 0; i < 300; i++ {
+			s, err := GenerateStartUpper(16, noAmb)
+			if err != nil || len(s) != 16 {
+				t.Fatalf("len %d err %v", len(s), err)
+			}
+			if s[0] < 'A' || s[0] > 'Z' || !hasAllClasses(s) {
+				t.Fatalf("%q: phải bắt đầu bằng chữ hoa và đủ 4 loại ký tự", s)
+			}
+			if noAmb && strings.ContainsAny(s, ambiguous) {
+				t.Fatalf("%q còn ký tự dễ nhầm", s)
+			}
+		}
+	}
+}
