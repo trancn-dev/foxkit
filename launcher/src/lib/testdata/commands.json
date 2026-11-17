@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "commands": [
+    {
+      "name": "port", "title": "Kiểm tra port", "description": "Xem process nào đang chiếm port, có thể kill", "category": "dev",
+      "args": [ { "name": "port", "type": "int", "required": false, "min": 1, "max": 65535, "label": "Port" } ],
+      "flags": [
+        { "name": "kill", "type": "bool", "default": false, "label": "Kill process", "confirm": "Kill process đang dùng port này?" },
+        { "name": "list", "type": "bool", "default": false, "label": "Liệt kê" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "port 8000 --kill", "desc": "Kill process đang chiếm port 8000" }, { "cmd": "port --list", "desc": "Mọi port đang mở" } ]
+    },
+    {
+      "name": "hash", "title": "Tính hash", "description": "Tính md5/sha256 của file", "category": "dev",
+      "args": [ { "name": "file", "type": "file", "required": false, "multiple": true, "label": "File" } ],
+      "flags": [ { "name": "algo", "type": "enum", "options": ["md5", "sha1", "sha256"], "default": "sha256", "label": "Thuật toán" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "size", "title": "Dung lượng thư mục", "description": "Thư mục/file nặng nhất", "category": "life",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục" } ],
+      "flags": [ { "name": "top", "type": "int", "min": 1, "max": 100, "default": 10, "label": "Top" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "hosts add", "title": "Thêm hosts", "description": "Thêm dòng vào file hosts", "category": "dev",
+      "args": [ { "name": "ip", "type": "string", "required": true, "label": "IP" }, { "name": "host", "type": "string", "required": true, "label": "Host" } ],
+      "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Áp dụng" } ],
+      "admin": true, "longRunning": false, "dryRun": true, "output": "kv"
+    },
+    {
+      "name": "hosts rm", "title": "Xóa hosts", "description": "Xóa dòng khỏi file hosts", "category": "dev",
+      "args": [ { "name": "host", "type": "string", "required": true, "label": "Host" } ],
+      "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Áp dụng" } ],
+      "admin": true, "longRunning": false, "dryRun": true, "output": "kv"
+    },
+    {
+      "name": "find", "title": "Tìm file", "description": "Tìm file theo tên/đuôi", "category": "life",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục" } ],
+      "flags": [ { "name": "ext", "type": "string", "label": "Đuôi file" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "rename", "title": "Đổi tên hàng loạt", "description": "Đổi tên file theo mẫu", "category": "life",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục" } ],
+      "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Áp dụng" } ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "table"
+    },
+    {
+      "name": "uuid", "title": "Sinh UUID", "description": "Sinh UUID v4 hoặc v7", "category": "dev",
+      "args": [],
+      "flags": [ { "name": "v", "type": "enum", "options": ["4", "7"], "default": "4", "label": "Phiên bản" }, { "name": "count", "type": "int", "min": 1, "max": 1000, "default": 1, "label": "Số lượng" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "text",
+      "examples": [ { "cmd": "uuid --v 7", "desc": "UUID v7" } ]
+    },
+    {
+      "name": "serve", "title": "Static server", "description": "Phục vụ thư mục qua HTTP", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục" } ],
+      "flags": [], "admin": false, "longRunning": true, "dryRun": false, "output": "stream"
+    }
+  ]
+}

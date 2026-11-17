@@ -15,7 +15,7 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] env — (cùng commit với port). Có `ParseError` (kèm số dòng), `Set`/`WriteTo` giữ nguyên byte (kể cả CRLF) cho `lara key` ở GĐ5. **Chưa kiểm** trên dự án Laravel thật: `.\foxkit env diff D:\Projects\<dự-án>`.
 - [ ] L1 launcher (nhiều commit nhỏ). Môi trường: MSVC Build Tools ở `D:\VS\BuildTools`, npm/cargo có mạng. Tauri chọn `2.x` (crate mới nhất trên crates.io là 3.0 alpha, spec chốt v2).
   - [x] L1.0 khung — commit "launcher: scaffold". Windows crate 0.62, sha2 0.11 (cargo chọn bản mới nhất tương thích). Icon tạm sinh từ chữ "fx" (thay bằng icon thật sau).
-  - [ ] L1.1 lib TS thuần + vitest (tokenize, resolve, fuzzy, ghost, placeholders, form, thread)
+  - [x] L1.1 lib TS thuần + vitest (47 test pass): tokenize, fuzzy, resolve, ghost, placeholders, form, thread, manifest. `thread.ts` chỉ là phần xem/đồng bộ (`ThreadStore` + backend giả để test), luồng thật nằm ở Rust (L1.2).
   - [ ] L1.2 Rust: config, runner (run/stream/stop), elevate
   - [ ] L1.3 Rust: context (focus, Explorer COM, VS Code)
   - [ ] L1.4 Rust: scan (+ schema JSON, trusted, scan-cache)
