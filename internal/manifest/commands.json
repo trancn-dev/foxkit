@@ -478,6 +478,24 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "diff", "title": "So sánh", "description": "So sánh hai file hoặc hai thư mục", "category": "dev",
+      "args": [
+        { "name": "a", "type": "file", "allowDir": true, "required": true, "label": "Bên trái" },
+        { "name": "b", "type": "file", "allowDir": true, "required": true, "label": "Bên phải" }
+      ],
+      "flags": [
+        { "name": "context", "type": "int", "default": 3, "min": 0, "max": 100, "label": "Dòng ngữ cảnh" },
+        { "name": "ignore-space", "type": "bool", "default": false, "label": "Bỏ qua khoảng trắng" },
+        { "name": "ignore-eol", "type": "bool", "default": true, "label": "Bỏ qua CRLF/LF" },
+        { "name": "ignore-case", "type": "bool", "default": false, "label": "Bỏ qua hoa/thường" },
+        { "name": "names-only", "type": "bool", "default": false, "label": "Chỉ liệt kê tên" },
+        { "name": "exclude", "type": "list", "label": "Bỏ qua (glob)" },
+        { "name": "exit-code", "type": "bool", "default": false, "label": "Exit 1 nếu khác" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "text",
+      "examples": [ { "cmd": "diff .env .env.production", "desc": "So hai file env" }, { "cmd": "diff D:\\deploy\\v1 D:\\deploy\\v2 --names-only", "desc": "File nào khác giữa hai bản deploy" } ]
+    },
+    {
       "name": "csv", "title": "CSV", "description": "Xem, lọc, thống kê, đổi CSV ↔ JSON", "category": "dev",
       "args": [ { "name": "file", "type": "file", "required": true, "label": "File CSV" } ],
       "flags": [

@@ -47,7 +47,9 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] nâng cấp port/ps/kill sang winapi (commit "winapi upgrade"): `port` điền `Path`; `ps` thêm `ppid`, `path` và tên Unicode đúng từ Toolhelp (RAM vẫn từ tasklist); `kill --tree` tự duyệt cây theo PPID (cháu → con → cha) thay `taskkill /T`. JSON cũ giữ nguyên (chỉ thêm field). `kill --tree` thật **chưa thử** (chỉ test logic thứ tự bằng bản giả).
 - [x] GĐ6 xong.
 - [x] fake (commit "fake"): `math/rand/v2` PCG theo seed (cùng seed → cùng byte), tên nam không "Thị", nữ không "Văn", email khớp tên trong cùng hàng, 100.000 dòng < 2s (test). Spec chỉnh: `Rows` trả `[]Row` (giữ thứ tự cột, MarshalJSON đúng thứ tự) thay `[]map`; `date`/`datetime` mặc định "5 năm gần nhất" tính theo ngày chạy nên chỉ lặp lại tuyệt đối trong cùng ngày — muốn cố định hãy truyền `date:A..B`.
-- [ ] GĐ7 còn lại: csv · diff · down · zip · sync · svg
+- [x] csv (commit "csv"): đọc BOM/CRLF/ô nhiều dòng/dấu `;`, `--where`, `--cols`, `--stats`, `--to json|ndjson|csv|tsv` (giữ nguyên tiếng Việt, đúng thứ tự cột); đã thử với file do `fake --format csv --bom` sinh. Đơn giản hóa so spec: luôn đọc cả file (tối đa 200MB), không dừng sớm cho `--head`; thêm cờ `--tail`, `--force`, `--typed` vào manifest. **Chưa thử** với CSV xuất từ Excel Việt Nam thật.
+- [x] diff (commit "diff"): Myers tự cài (cắt tiền/hậu tố; quá 3000 thao tác sửa thì coi đoạn giữa là "thay hết" để không nổ bộ nhớ), property test áp-lại, hunk gộp trong 2×context, 50.000 dòng < 1s (test), thư mục (khớp không phân biệt hoa thường, nhị phân so hash). Spec chỉnh: `Result.Added/Removed/Changed` là số **file** với thư mục và số **dòng** với một file; thêm cờ `--ignore-case`, `--exclude`. Lệch nhỏ: hunk xóa thuần với `--context 0` hiện `+0,0` (git hiện dòng trước đó).
+- [ ] GĐ7 còn lại: down · zip · sync · svg
 
 ## Chưa kiểm / để bạn tự thử trên Windows
 
