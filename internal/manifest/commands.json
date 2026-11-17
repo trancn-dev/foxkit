@@ -328,6 +328,30 @@
       "args": [ { "name": "ssid", "type": "string", "required": false, "label": "Tên Wi-Fi" } ],
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table",
       "examples": [ { "cmd": "wifi \"Office-5G\"", "desc": "Mật khẩu của một mạng đã lưu" } ]
+    },
+    {
+      "name": "json", "title": "JSON", "description": "Format, minify, kiểm tra, lấy giá trị JSON", "category": "dev",
+      "args": [ { "name": "file", "type": "file", "required": false, "label": "File JSON" } ],
+      "flags": [
+        { "name": "text", "type": "text", "label": "Hoặc dán JSON" },
+        { "name": "min", "type": "bool", "default": false, "label": "Minify" },
+        { "name": "indent", "type": "string", "default": "2", "label": "Indent" },
+        { "name": "sort-keys", "type": "bool", "default": false, "label": "Sắp key" },
+        { "name": "get", "type": "string", "label": "Lấy theo đường dẫn" },
+        { "name": "validate", "type": "bool", "default": false, "label": "Chỉ kiểm tra" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "text",
+      "examples": [
+        { "cmd": "json composer.json --get require.laravel/framework", "desc": "Lấy phiên bản Laravel trong composer.json" },
+        { "cmd": "json data.json --validate", "desc": "Kiểm tra JSON, báo đúng dòng/cột lỗi" }
+      ]
+    },
+    {
+      "name": "jwt", "title": "Giải mã JWT", "description": "Xem header, payload, hạn dùng, kiểm tra chữ ký HS*", "category": "dev",
+      "args": [ { "name": "token", "type": "text", "required": true, "label": "Token" } ],
+      "flags": [ { "name": "secret", "type": "string", "label": "Secret (để verify)" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "jwt @clip", "desc": "Giải mã token đang copy trong clipboard" } ]
     }
   ]
 }

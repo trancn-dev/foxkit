@@ -3,24 +3,35 @@ package output
 import "fmt"
 
 // Error là lỗi có mã, thông điệp tiếng Việt và gợi ý bước tiếp theo.
+// Position: vị trí lỗi cú pháp (lệnh json).
+type Position struct {
+	Line int `json:"line"`
+	Col  int `json:"col"`
+}
+
 type Error struct {
-	Code    string `json:"code"`
-	Message string `json:"message"`
-	Hint    string `json:"hint,omitempty"`
-	Exit    int    `json:"-"`
+	Code     string    `json:"code"`
+	Message  string    `json:"message"`
+	Hint     string    `json:"hint,omitempty"`
+	Position *Position `json:"position,omitempty"`
+	Exit     int       `json:"-"`
 }
 
 func (e *Error) Error() string { return e.Message }
 
 // Usage: sai tham số (exit 2).
-func Usage(code, msg, hint string) *Error { return &Error{code, msg, hint, 2} }
+func Usage(code, msg, hint string) *Error {
+	return &Error{Code: code, Message: msg, Hint: hint, Exit: 2}
+}
 
 // Fail: lỗi khi chạy (exit 1).
-func Fail(code, msg, hint string) *Error { return &Error{code, msg, hint, 1} }
+func Fail(code, msg, hint string) *Error {
+	return &Error{Code: code, Message: msg, Hint: hint, Exit: 1}
+}
 
 // NeedAdmin: cần quyền admin (exit 3).
 func NeedAdmin(msg string) *Error {
-	return &Error{"NEED_ADMIN", msg, "Chạy lại terminal bằng quyền Administrator", 3}
+	return &Error{Code: "NEED_ADMIN", Message: msg, Hint: "Chạy lại terminal bằng quyền Administrator", Exit: 3}
 }
 
 // Các lỗi dùng chung (foundation mục 7.3).

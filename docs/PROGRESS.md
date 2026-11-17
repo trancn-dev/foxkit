@@ -31,7 +31,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] hosts (commit "hosts"): round-trip byte-for-byte (CRLF/BOM), backup `.foxkit.bak`, ghi nguyên tử; thử thật chỉ với `FOXKIT_HOSTS` trỏ file tạm. **Chưa thử trên hosts thật** (cần admin, PowerShell Administrator): `.oxkit hosts add shop.test` (xem trước) rồi `--apply`, `ping shop.test`, `hosts rm shop.test --apply`. Spec chỉnh: `Change` thêm trường `managed`, action `conflict`/`notfound` để cmd map sang lỗi; `File` thêm `FinalNewline`.
 - [x] ip, dns (commit "ip, dns"): `ip` không gửi request ra ngoài khi không có --public (PublicIP test bằng httptest); `dns` host chuẩn hóa từ URL, test localhost không cần mạng. **Chưa thử**: `ip --public`, `dns google.com --type all`, `dns --flush` (cần mạng/quyền).
 - [x] wifi (commit "wifi"): parse XML 3 fixture + UTF-16; thư mục tạm luôn xóa (đã kiểm: 0 thư mục foxkit-wifi-* còn lại). Máy này không có card Wi-Fi nên chỉ kiểm được nhánh `WIFI_UNAVAILABLE`; **chưa kiểm** trên máy có Wi-Fi: `.oxkit wifi` (không dán kết quả ra nơi công khai vì có mật khẩu rõ).
-- [ ] GĐ4: json · jwt · http · tcp · serve
+- [x] json, jwt (commit "json, jwt"): vector jwt.io đạt; Pretty/Minify giữ thứ tự key và số lớn. `output.Error` thêm trường `Position`. `readStdin` bỏ BOM UTF-8 (PowerShell 5.1 thêm BOM khi pipe). Lưu ý: PowerShell 5.1 làm mất nháy kép trong `--text '{"a":1}'` khi gọi exe (lỗi của PowerShell, không phải foxkit) — dùng file hoặc stdin.
+- [ ] GĐ4 còn lại: http · tcp · serve
 - [ ] GĐ5: proj · lara · repos · branches
 - [ ] GĐ6: core/winapi · disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
