@@ -118,5 +118,4 @@ func Scan(ctx context.Context, dir string, depth int, fetch bool) ([]Repo, error
 }
 
 // firstLine: lỗi git nhiều dòng (vd "dubious ownership") chỉ lấy dòng đầu cho gọn.
-func firstLine(s string) string { return strings.SplitN(s, "
-", 2)[0] }
+func firstLine(s string) string { return strings.SplitN(s, "\n", 2)[0] }
