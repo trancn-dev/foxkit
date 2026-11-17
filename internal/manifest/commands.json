@@ -478,6 +478,13 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "clip", "title": "Clipboard", "description": "Đọc/ghi clipboard", "category": "life",
+      "args": [ { "name": "text", "type": "text", "required": false, "label": "Nội dung (để trống = đọc)" } ],
+      "flags": [ { "name": "clear", "type": "bool", "default": false, "label": "Xóa clipboard" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "text",
+      "examples": [ { "cmd": "clip \"Đơn hàng mới\"", "desc": "Ghi chữ vào clipboard" } ]
+    },
+    {
       "name": "startup", "title": "Chương trình khởi động", "description": "App tự chạy khi đăng nhập Windows", "category": "system",
       "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table",
       "examples": [ { "cmd": "startup", "desc": "App nào tự chạy khi đăng nhập" } ]
