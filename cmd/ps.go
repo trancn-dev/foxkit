@@ -67,9 +67,9 @@ func init() {
 			}
 			return p.Success(map[string]any{"items": list, "total": n}, func(w io.Writer) error {
 				tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-				fmt.Fprintln(tw, "PID\tNAME\tMEM")
+				fmt.Fprintln(tw, "PID\tNAME\tMEM\tPATH")
 				for _, x := range list {
-					fmt.Fprintf(tw, "%d\t%s\t%s\n", x.PID, x.Name, fsutil.FormatBytes(x.MemBytes))
+					fmt.Fprintf(tw, "%d\t%s\t%s\t%s\n", x.PID, x.Name, fsutil.FormatBytes(x.MemBytes), x.Path)
 				}
 				if err := tw.Flush(); err != nil {
 					return err

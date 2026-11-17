@@ -5,6 +5,7 @@ import (
 	"sort"
 	"strings"
 
+	"foxkit/internal/winapi"
 	"foxkit/internal/winexec"
 )
 
@@ -13,6 +14,8 @@ type Proc struct {
 	Name     string `json:"name"`
 	MemBytes int64  `json:"memBytes"`
 	Session  string `json:"session"`
+	PPID     int    `json:"ppid,omitempty"` // thêm ở GĐ6 (winapi), JSON cũ giữ nguyên
+	Path     string `json:"path,omitempty"`
 }
 
 type Group struct {
@@ -30,13 +33,32 @@ func convert(in []winexec.Proc) []Proc {
 	return out
 }
 
-// List: process đang chạy qua tasklist.
+// List: process đang chạy. RAM/session lấy từ tasklist; tên (Unicode đúng), PPID và đường dẫn exe bổ sung bằng winapi
+// khi có (không có/thiếu quyền thì giữ dữ liệu của tasklist, không phải lỗi).
 func List(ctx context.Context) ([]Proc, error) {
-	ps, err := winexec.Tasklist(ctx)
+	tl, err := winexec.Tasklist(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return convert(ps), nil
+	ps := convert(tl)
+	snap, err := winapi.Processes()
+	if err != nil {
+		return ps, nil
+	}
+	byPID := make(map[int]winapi.Proc, len(snap))
+	for _, p := range snap {
+		byPID[p.PID] = p
+	}
+	for i := range ps {
+		if w, ok := byPID[ps[i].PID]; ok {
+			ps[i].PPID = w.PPID
+			if w.Name != "" {
+				ps[i].Name = w.Name
+			}
+		}
+		ps[i].Path, _ = winapi.ProcessPath(ps[i].PID) // process hệ thống: thiếu quyền → để trống
+	}
+	return ps, nil
 }
 
 // Parse đọc CSV của tasklist (dùng cho test với fixture nhiều ngôn ngữ).

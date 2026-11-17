@@ -44,7 +44,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] startup, svc (commit "startup, svc"): đã đọc thật (startup liệt kê nguồn Run/Startup folder; svc --all liệt kê khi không admin). **Chưa kiểm**: trạng thái bật/tắt của startup khớp Task Manager (đổi một mục rồi so); `svc stop|start|restart` thật (cần admin, chỉ `start` service đã chạy được thử → không đổi gì). Spec chỉnh: `startup.List` trả thêm `warnings []string`.
 - [x] clip (commit "clip"): dependency `github.com/atotto/clipboard` thêm theo roadmap mục 5; test bằng clipboard giả (CRLF, bỏ newline cuối từ stdin, giới hạn 10MB); test thật chỉ chạy khi `FOXKIT_TEST_CLIPBOARD=1` (vì ghi đè clipboard của bạn — **chưa chạy**). Thử tay: `.oxkit clip "Xin chào đ 🚀"` rồi `.oxkit clip`. Không phân biệt được "đang bận" với "không có chữ" khi đọc lỗi (thư viện không cho biết) nên đọc lỗi → `CLIP_NO_TEXT` kèm gợi ý cả hai khả năng.
 - [x] lock (commit "lock"): Restart Manager qua LazyDLL, test layout `RM_PROCESS_INFO` = 668 byte, test tự-khóa (mở file trong test → PID của test nằm trong holders; đóng → `[]`) đạt. **Chưa thử** `lock <thư mục dự án thật> --kill` và nhận ra VS Code/node (mục "Chạy thử" của spec).
-- [ ] GĐ6 còn lại: nâng cấp port/ps/kill
+- [x] nâng cấp port/ps/kill sang winapi (commit "winapi upgrade"): `port` điền `Path`; `ps` thêm `ppid`, `path` và tên Unicode đúng từ Toolhelp (RAM vẫn từ tasklist); `kill --tree` tự duyệt cây theo PPID (cháu → con → cha) thay `taskkill /T`. JSON cũ giữ nguyên (chỉ thêm field). `kill --tree` thật **chưa thử** (chỉ test logic thứ tự bằng bản giả).
+- [x] GĐ6 xong.
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
 
 ## Chưa kiểm / để bạn tự thử trên Windows

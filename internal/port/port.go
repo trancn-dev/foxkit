@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"foxkit/internal/winapi"
 	"foxkit/internal/winexec"
 )
 
@@ -43,8 +44,16 @@ func List(ctx context.Context) ([]Listener, error) {
 			names[p.PID] = p.Name
 		}
 	}
+	paths := map[int]string{} // đường dẫn exe theo PID (winapi); process hệ thống/thiếu quyền thì để trống
 	for i := range items {
-		items[i].Process = names[items[i].PID]
+		pid := items[i].PID
+		items[i].Process = names[pid]
+		p, ok := paths[pid]
+		if !ok {
+			p, _ = winapi.ProcessPath(pid) // lỗi quyền → chuỗi rỗng, không phải lỗi lệnh
+			paths[pid] = p
+		}
+		items[i].Path = p
 	}
 	return items, nil
 }

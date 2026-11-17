@@ -7,10 +7,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	"foxkit/internal/ps"
-	"foxkit/internal/winexec"
+	"foxkit/internal/winapi"
 )
 
 type Target struct {
@@ -40,9 +39,27 @@ var killFn = func(pid int) error {
 	}
 	return p.Kill()
 }
+
+// procsFn: snapshot process (có PPID) để tự duyệt cây; tách ra để test.
+var procsFn = winapi.Processes
+
+// treeFn kill process con/cháu (sâu nhất trước) rồi tới chính nó, thay cho `taskkill /T`. Lỗi đầu tiên được trả sau khi đã thử hết.
 var treeFn = func(ctx context.Context, pid int) error {
-	_, err := winexec.Run(ctx, 15*time.Second, "taskkill", "/PID", strconv.Itoa(pid), "/T", "/F")
-	return err
+	procs, err := procsFn()
+	if err != nil {
+		return err
+	}
+	order := winapi.Descendants(procs, pid) // BFS: cha trước con → kill ngược lại để con trước
+	var first error
+	for i := len(order) - 1; i >= 0; i-- {
+		if err := killFn(order[i]); err != nil && first == nil && !errors.Is(err, os.ErrProcessDone) {
+			first = err
+		}
+	}
+	if err := killFn(pid); err != nil && first == nil {
+		first = err
+	}
+	return first
 }
 
 var protectedNames = map[string]bool{

@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"foxkit/internal/ps"
+	"foxkit/internal/winapi"
 )
 
 func fake(procs ...ps.Proc) {
@@ -91,14 +92,17 @@ func TestKillResultAndExitCode(t *testing.T) {
 	}
 }
 
-func TestTreeUsesTaskkill(t *testing.T) {
-	oldK, oldT := killFn, treeFn
-	defer func() { killFn, treeFn = oldK, oldT }()
-	var called []int
-	killFn = func(int) error { return nil }
-	treeFn = func(_ context.Context, pid int) error { called = append(called, pid); return nil }
+func TestTreeKillsChildrenBeforeParent(t *testing.T) {
+	oldK, oldP := killFn, procsFn
+	defer func() { killFn, procsFn = oldK, oldP }()
+	// npm(10) → node(11) → esbuild(12); process 20 không liên quan
+	procsFn = func() ([]winapi.Proc, error) {
+		return []winapi.Proc{{PID: 10, PPID: 1}, {PID: 11, PPID: 10}, {PID: 12, PPID: 11}, {PID: 20, PPID: 1}}, nil
+	}
+	var order []int
+	killFn = func(pid int) error { order = append(order, pid); return nil }
 	r := Kill(context.Background(), []Target{{10, "npm.exe"}}, true)
-	if len(called) != 1 || len(r.Killed) != 1 {
-		t.Fatalf("%v %+v", called, r)
+	if len(r.Killed) != 1 || len(order) != 3 || order[0] != 12 || order[1] != 11 || order[2] != 10 {
+		t.Fatalf("phải kill cháu → con → cha, got %v %+v", order, r)
 	}
 }
