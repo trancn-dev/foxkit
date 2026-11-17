@@ -33,6 +33,8 @@ func NewV7(now time.Time) (UUID, error)  // truyền now để test được
 func (u UUID) String() string            // dạng 8-4-4-4-12, chữ thường
 func (u UUID) Version() int
 ```
+> **Đã kiểm (Go 1.27):** thư viện chuẩn có package `uuid` (`uuid.NewV4()`, `uuid.NewV7()`, `String()`), nên **không có `internal/uuid`**; `cmd/uuid.go` dùng thẳng, không có lỗi `UUID_RANDOM_FAILED` (hàm không trả error). Test nằm ở `cmd/uuid_test.go`.
+
 Trước khi viết, kiểm tra bản Go đang dùng đã có package UUID trong thư viện chuẩn chưa (`go doc` hoặc trang release notes). **Có thì dùng luôn và bỏ `internal/uuid`**; chưa có thì tự viết như dưới.
 
 ## 5. Cách hoạt động

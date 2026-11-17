@@ -45,7 +45,7 @@ func EntropyBits(length, alphabetSize int) float64 // length * log2(alphabetSize
 ## 5. Cách hoạt động
 1. Lấy alphabet theo charset; lọc ký tự dễ nhầm nếu cần.
 2. Với mỗi vị trí: `n, err := rand.Int(rand.Reader, big.NewInt(int64(len(alphabet))))` → lấy `alphabet[n]`. Cách này **không bị lệch phân bố** (khác `byte % len`).
-3. Với `all` và `len >= 4`: đảm bảo có ít nhất 1 chữ thường, 1 chữ hoa, 1 số, 1 ký hiệu. Nếu thiếu thì sinh lại cả chuỗi (vòng lặp, tối đa 100 lần; xác suất cần lặp rất nhỏ).
+3. Với `all` và `len >= 4`: đảm bảo có ít nhất 1 chữ thường, 1 chữ hoa, 1 số, 1 ký hiệu. Nếu thiếu thì sinh lại cả chuỗi (vòng lặp, tối đa 10000 lần; với `len=4` chỉ ~6% chuỗi đủ 4 loại nên 100 lần là không đủ).
 4. Tính `entropyBits` làm tròn 1 chữ số thập phân.
 
 ## 6. Output
