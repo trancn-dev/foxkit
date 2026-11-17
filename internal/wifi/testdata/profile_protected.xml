@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+	<name>Home</name>
+	<SSIDConfig>
+		<SSID><name>Home</name></SSID>
+		<nonBroadcast>false</nonBroadcast>
+	</SSIDConfig>
+	<MSM>
+		<security>
+			<authEncryption>
+				<authentication>WPA3SAE</authentication>
+				<encryption>AES</encryption>
+			</authEncryption>
+			<sharedKey>
+				<keyType>passPhrase</keyType>
+				<protected>true</protected>
+				<keyMaterial>01000000D08C9DDF0115D1118C7A00C04FC297EB</keyMaterial>
+			</sharedKey>
+		</security>
+	</MSM>
+</WLANProfile>

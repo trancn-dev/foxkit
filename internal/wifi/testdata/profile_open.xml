@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+	<name>Cafe Free</name>
+	<SSIDConfig>
+		<SSID><name>Cafe Free</name></SSID>
+		<nonBroadcast>true</nonBroadcast>
+	</SSIDConfig>
+	<MSM>
+		<security>
+			<authEncryption>
+				<authentication>open</authentication>
+				<encryption>none</encryption>
+				<useOneX>false</useOneX>
+			</authEncryption>
+		</security>
+	</MSM>
+</WLANProfile>

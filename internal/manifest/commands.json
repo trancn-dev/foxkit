@@ -322,6 +322,12 @@
       ],
       "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
       "examples": [ { "cmd": "dns google.com --type all", "desc": "Mọi loại bản ghi của google.com" }, { "cmd": "dns --flush", "desc": "Xóa cache DNS" } ]
+    },
+    {
+      "name": "wifi", "title": "Mật khẩu Wi-Fi", "description": "Xem mật khẩu Wi-Fi đã lưu", "category": "network",
+      "args": [ { "name": "ssid", "type": "string", "required": false, "label": "Tên Wi-Fi" } ],
+      "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "wifi \"Office-5G\"", "desc": "Mật khẩu của một mạng đã lưu" } ]
     }
   ]
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+	<name>Office-5G</name>
+	<SSIDConfig>
+		<SSID>
+			<hex>4F66666963652D3547</hex>
+			<name>Office-5G</name>
+		</SSID>
+		<nonBroadcast>false</nonBroadcast>
+	</SSIDConfig>
+	<connectionType>ESS</connectionType>
+	<connectionMode>auto</connectionMode>
+	<MSM>
+		<security>
+			<authEncryption>
+				<authentication>WPA2PSK</authentication>
+				<encryption>AES</encryption>
+				<useOneX>false</useOneX>
+			</authEncryption>
+			<sharedKey>
+				<keyType>passPhrase</keyType>
+				<protected>false</protected>
+				<keyMaterial>fake-pass-for-test</keyMaterial>
+			</sharedKey>
+		</security>
+	</MSM>
+</WLANProfile>
