@@ -40,7 +40,9 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] GĐ5 xong.
 - [x] core/winapi (commit "winapi"): `golang.org/x/sys` thêm vào theo roadmap mục 5 (được phép từ GĐ6). `IsAdmin`, `ProcessPath`, `Processes` (Toolhelp32, có PPID), `Descendants` (duyệt cây theo PPID); có `winapi_other.go` cho nơi không phải Windows.
 - [x] disk, sysinfo (commit "disk, sysinfo"): đã chạy thật — thấy 6 ổ, Windows 11 (ProductName sửa theo build), RAM/uptime; ổ mạng mất kết nối có timeout 3s (**chưa thử** với ổ mạng thật). `disk.Fill` làm tròn 1 chữ số. Test layout `MEMORYSTATUSEX` = 64 byte.
-- [ ] GĐ6 còn lại: path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
+- [x] path add/rm/clean (commit "path add/rm/clean"): logic thuần có test; ghi registry **giữ EXPAND_SZ** (test trên khóa tạm `HKCUSoftwareoxkit-test`, không đụng `Environment` thật); backup `%LOCALAPPDATA%oxkitbackup`; `path --scope` gắn nhãn user/system/process. Chỉ thử dry-run thật. **Chưa thử --apply** (ghi PATH thật): `.oxkit path add C:	oolsbin` → `--apply` → mở terminal mới → `path rm ... --apply`. System scope cần PowerShell Administrator.
+- [x] startup, svc (commit "startup, svc"): đã đọc thật (startup liệt kê nguồn Run/Startup folder; svc --all liệt kê khi không admin). **Chưa kiểm**: trạng thái bật/tắt của startup khớp Task Manager (đổi một mục rồi so); `svc stop|start|restart` thật (cần admin, chỉ `start` service đã chạy được thử → không đổi gì). Spec chỉnh: `startup.List` trả thêm `warnings []string`.
+- [ ] GĐ6 còn lại: clip · lock · nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
 
 ## Chưa kiểm / để bạn tự thử trên Windows

@@ -478,6 +478,34 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "startup", "title": "Chương trình khởi động", "description": "App tự chạy khi đăng nhập Windows", "category": "system",
+      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "startup", "desc": "App nào tự chạy khi đăng nhập" } ]
+    },
+    {
+      "name": "svc", "title": "Services", "description": "Xem service dev: MySQL, Redis, Apache...", "category": "dev",
+      "args": [ { "name": "filter", "type": "string", "required": false, "label": "Lọc" } ],
+      "flags": [ { "name": "all", "type": "bool", "default": false, "label": "Mọi service" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "svc sql", "desc": "Service có chữ sql" } ]
+    },
+    {
+      "name": "svc start", "title": "Bật service", "description": "Start một Windows service", "category": "dev",
+      "args": [ { "name": "name", "type": "string", "required": true, "label": "Tên service" } ],
+      "flags": [], "admin": true, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "svc start MySQL80", "desc": "Bật MySQL" } ]
+    },
+    {
+      "name": "svc stop", "title": "Tắt service", "description": "Stop một Windows service", "category": "dev",
+      "args": [ { "name": "name", "type": "string", "required": true, "label": "Tên service" } ],
+      "flags": [], "admin": true, "confirm": "Dừng service này?", "longRunning": false, "dryRun": false, "output": "kv"
+    },
+    {
+      "name": "svc restart", "title": "Restart service", "description": "Restart một Windows service", "category": "dev",
+      "args": [ { "name": "name", "type": "string", "required": true, "label": "Tên service" } ],
+      "flags": [], "admin": true, "longRunning": false, "dryRun": false, "output": "kv"
+    },
+    {
       "name": "disk", "title": "Ổ đĩa", "description": "Dung lượng các ổ, cảnh báo ổ sắp đầy", "category": "system",
       "args": [],
       "flags": [
