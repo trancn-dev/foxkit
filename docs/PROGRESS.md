@@ -9,10 +9,10 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] pass — 7dd3c3e (chung commit với uuid; các mục nhỏ gộp commit vì manifest dùng chung một file). Spec sửa: vòng lặp đảm bảo 4 loại ký tự nâng 100 → 10000 lần (len=4 chỉ ~6% chuỗi đủ loại).
 - [x] hash — fde3be2. Tiêu chí: vector chuẩn đạt; file lớn >1GB **chưa kiểm** (dùng `io.Copy` nên không nạp RAM) — thử: `.\foxkit hash D:\big.iso`. Thêm: `--check` không khớp in `khớp: false` rồi trả `HASH_MISMATCH`; item lỗi in ra stderr.
 - [x] enc — (cùng commit với hash). `ENC_INPUT_TOO_LARGE` dùng chung `output.InputTooLarge` rồi đổi code.
-- [x] ts — (commit "ts, case"). Spec sửa: ví dụ output của `1763287727` là 2025-11-16 (Chủ Nhật), không phải 2026. **Chưa kiểm** trên máy không cài Go: thử copy `foxkit.exe` sang máy khác rồi `foxkit ts 0 --tz Asia/Ho_Chi_Minh` (đã nhúng `time/tzdata`).
+- [x] ts — ad82327. Spec sửa: ví dụ output của `1763287727` là 2025-11-16 (Chủ Nhật), không phải 2026. **Chưa kiểm** trên máy không cài Go: thử copy `foxkit.exe` sang máy khác rồi `foxkit ts 0 --tz Asia/Ho_Chi_Minh` (đã nhúng `time/tzdata`).
 - [x] case — (cùng commit với ts). `kebab` và `slug` khác nhau ở chỗ slug chỉ giữ `a-z0-9`.
-- [ ] port
-- [ ] env
+- [x] port — (commit "port, env"). Đã thử thật trên listener tự tạo: find/json/kill/trống đều đúng; port 445 → `PORT_SYSTEM_PROCESS`. Lệch spec nhỏ: `List` gọi `tasklist` một lần cho mọi PID thay vì mỗi PID một lần. **Chưa kiểm**: `NEED_ADMIN` (kill process của user khác/service) — thử `.\foxkit port 3306 --kill` khi MySQL chạy dưới service mà terminal không admin.
+- [x] env — (cùng commit với port). Có `ParseError` (kèm số dòng), `Set`/`WriteTo` giữ nguyên byte (kể cả CRLF) cho `lara key` ở GĐ5. **Chưa kiểm** trên dự án Laravel thật: `.\foxkit env diff D:\Projects\<dự-án>`.
 - [ ] L1 launcher (nhiều commit nhỏ theo mục 4, 5, 6.x, 7, 8)
 - [ ] GĐ2: size · dup · rename · find · temp · prune · todo
 - [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi

@@ -91,6 +91,43 @@
         { "cmd": "case slug \"Đơn hàng mới\"", "desc": "Slug bỏ dấu tiếng Việt" },
         { "cmd": "case all userName", "desc": "Mọi kiểu một lượt" }
       ]
+    },
+    {
+      "name": "port", "title": "Kiểm tra port", "description": "Xem process nào đang chiếm port, có thể kill", "category": "dev",
+      "args": [ { "name": "port", "type": "int", "required": false, "min": 1, "max": 65535, "label": "Port" } ],
+      "flags": [
+        { "name": "kill", "type": "bool", "default": false, "label": "Kill process", "confirm": "Kill process đang dùng port này?" },
+        { "name": "list", "type": "bool", "default": false, "label": "Liệt kê mọi port đang mở" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [
+        { "cmd": "port 8000", "desc": "Ai đang chiếm port 8000" },
+        { "cmd": "port 8000 --kill", "desc": "Kill process đang chiếm port 8000" },
+        { "cmd": "port --list", "desc": "Mọi port đang LISTEN" }
+      ]
+    },
+    {
+      "name": "env diff", "title": "So sánh .env", "description": "So .env với .env.example: thiếu, thừa, rỗng", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục dự án" } ],
+      "flags": [
+        { "name": "file", "type": "string", "default": ".env", "label": "File env" },
+        { "name": "example", "type": "string", "default": ".env.example", "label": "File mẫu" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "env diff D:\\Projects\\shop-api", "desc": "Biến .env còn thiếu so với .env.example" } ]
+    },
+    {
+      "name": "env get", "title": "Đọc biến .env", "description": "Đọc giá trị một key trong .env", "category": "dev",
+      "args": [
+        { "name": "key", "type": "string", "required": true, "label": "Key" },
+        { "name": "dir", "type": "dir", "required": false, "label": "Thư mục dự án" }
+      ],
+      "flags": [
+        { "name": "file", "type": "string", "default": ".env", "label": "File env" },
+        { "name": "show", "type": "bool", "default": false, "label": "Hiện giá trị bí mật" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "env get DB_PASSWORD --show", "desc": "Đọc giá trị bí mật (không che)" } ]
     }
   ]
 }
