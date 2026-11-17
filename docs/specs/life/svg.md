@@ -1,6 +1,6 @@
 # Spec: `foxkit svg`
 
-> Nhóm: **life** (xử lý ảnh) · Giai đoạn: GĐ7 · Trạng thái: chưa làm · Cần trước: [core/foundation.md](../core/foundation.md)
+> Nhóm: **life** (xử lý ảnh) · Giai đoạn: GĐ7 · Trạng thái: xong · Cần trước: [core/foundation.md](../core/foundation.md)
 > Khó: **5** — lệnh có thuật toán nặng nhất roadmap. Làm sau cùng trong GĐ7. Không dependency (chỉ thư viện chuẩn).
 
 ## 1. Mục đích
@@ -92,7 +92,7 @@ Dùng **marching squares** trên lưới `(w+1)×(h+1)` cho từng bitmask — c
 
 ### 5.5 Đơn giản hóa
 - **Ramer–Douglas–Peucker** với dung sai `--simplify` trên từng chu tuyến (xử lý vòng khép kín bằng cách tách tại hai điểm xa nhau nhất). Chu tuyến còn < 3 điểm bị bỏ.
-- Với `--smooth`: lấy các điểm đã đơn giản hóa, chuyển **Catmull-Rom → Bézier bậc 3** (`C`) cho đoạn cong; góc nhọn (góc giữa hai đoạn < 60°) giữ nguyên là đỉnh (dùng `L`) để chữ và hình vuông không bị tròn mất góc.
+- Với `--smooth`: lấy các điểm đã đơn giản hóa, chuyển **Catmull-Rom → Bézier bậc 3** (`C`) cho đoạn cong; góc nhọn (góc giữa hai đoạn < 120°; bản đầu ghi 60° làm hình vuông 90° bị phồng tròn ra ngoài khung) giữ nguyên là đỉnh (dùng `L`) để chữ và hình vuông không bị tròn mất góc.
 
 ### 5.6 Xuất SVG
 ```xml

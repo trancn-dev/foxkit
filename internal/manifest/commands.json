@@ -645,6 +645,30 @@
       "name": "sysinfo", "title": "Thông tin máy", "description": "Windows, CPU, RAM, uptime", "category": "system",
       "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
       "examples": [ { "cmd": "sysinfo", "desc": "Windows, CPU, RAM, uptime của máy" } ]
+    },
+    {
+      "name": "svg", "title": "PNG → SVG", "description": "Chuyển PNG/JPG sang SVG (vector hóa logo, icon) hoặc nhúng ảnh", "category": "life",
+      "args": [ { "name": "file", "type": "file", "required": true, "multiple": true, "label": "Ảnh PNG/JPG" } ],
+      "flags": [
+        { "name": "mode", "type": "enum", "options": ["trace","embed"], "default": "trace", "label": "Chế độ" },
+        { "name": "out", "type": "string", "label": "Lưu ra" },
+        { "name": "colors", "type": "int", "default": 8, "min": 2, "max": 32, "label": "Số màu" },
+        { "name": "mono", "type": "bool", "default": false, "label": "Đen trắng (logo, chữ ký)" },
+        { "name": "threshold", "type": "int", "default": 128, "min": 0, "max": 255, "label": "Ngưỡng đen/trắng" },
+        { "name": "fill", "type": "string", "default": "#000000", "label": "Màu tô (đen trắng)" },
+        { "name": "scale", "type": "string", "default": "1", "label": "Phóng to hiển thị" },
+        { "name": "max-pixels", "type": "int", "default": 4000000, "min": 1, "label": "Giới hạn pixel" },
+        { "name": "simplify", "type": "string", "default": "1.0", "label": "Đơn giản hóa (px)" },
+        { "name": "smooth", "type": "bool", "default": false, "label": "Làm mượt đường cong" },
+        { "name": "despeckle", "type": "int", "default": 4, "min": 0, "label": "Bỏ nhiễu nhỏ hơn (px)" },
+        { "name": "bg", "type": "enum", "options": ["keep","remove"], "default": "keep", "label": "Nền" },
+        { "name": "force", "type": "bool", "default": false, "label": "Ghi đè / ảnh lớn" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [
+        { "cmd": "svg logo.png --colors 4 --smooth", "desc": "Vector hóa logo, 4 màu, đường cong mượt" },
+        { "cmd": "svg signature.png --mono --threshold 150 --bg remove", "desc": "Chữ ký đen trắng, nền trong suốt" }
+      ]
     }
   ]
 }

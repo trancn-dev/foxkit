@@ -52,14 +52,17 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] down (commit "down"): test httptest — tải đủ + sha256, đứt kết nối giữa chừng → nối tiếp bằng Range, server bỏ qua Range → tải lại từ đầu, `Content-Disposition` độc hại → tên an toàn, sha sai → xóa file, 404 không retry / 503 retry đủ 4 lần, hủy giữ `.part`. Đơn giản hóa: sha256 tính một lượt sau khi tải xong (không TeeReader song song). `--out` chưa tồn tại và không kết thúc bằng `\` được hiểu là **tên file**. **Chưa thử** tải file lớn trên mạng thật và Ctrl+C rồi chạy lại.
 - [x] zip pack/unpack/list (commit "zip"): round-trip tên tiếng Việt + thư mục rỗng, loại mặc định (`.git`, `node_modules`, `vendor`, `.idea`, `.vscode`, `*.log`, `.env`), **Zip Slip** (`../../x`, `C:\x`, `/abs`, tên dành riêng) bị chặn trước khi ghi bất kỳ file nào, zip bomb (> 20× zip hoặc 20GB), lỗi giữa chừng không để lại `.tmp`. **Chưa kiểm** Windows Explorer mở zip do foxkit tạo (tên tiếng Việt) — mở thử `shop.zip` bằng Explorer.
 - [x] sync (commit "sync"): package `internal/syncdir` (không phải `internal/sync`, để khỏi trùng thư viện chuẩn). Test: B rỗng → copy hết, hai cây giống hệt (hash), chạy lại rỗng (mtime được giữ), mtime lệch 1s coi là giống / 10s khác, `--compare hash` bắt được đổi nội dung cùng size+mtime, `--delete` chuyển vào `.foxkit-trash\<ts>` (không mất), `SYNC_OVERLAP`, đích gốc ổ/Windows/Program Files/Users bị chặn, file nguồn bị khóa độc quyền → `Failed` mà file khác vẫn chép, hủy giữa chừng không để `.foxkit-tmp`. Đã chạy thật trên thư mục tạm. Thêm `onlyInDst` vào Plan để in "chỉ có ở đích". **Chưa thử** USB FAT/exFAT thật (mtime thô) và ổ đích gần đầy (kiểm dung lượng dùng `GetDiskFreeSpaceEx`).
-- [ ] GĐ7 còn lại: svg
+- [x] svg (commit "svg"): `internal/svgtrace` tự viết, không dependency: median cut → despeckle → dò viền trên cạnh pixel (tương đương marching squares, saddle giải quyết bằng quy ước rẽ phải > thẳng > rẽ trái nên ổn định) → RDP trên vòng khép kín → `--smooth` Catmull-Rom→Bézier. Test: chữ nhật = 1 chu tuyến 4 đỉnh, lỗ = 2 chu tuyến, saddle lặp 20 lần giống nhau, RDP, median cut 3 màu, despeckle không tạo lỗ, alpha=0 không sinh path, `--bg remove`, **Shoelace khớp đúng số pixel (thô) và sai lệch < 2% với simplify 0.5**, logo giả 512×512 < 10 KB, 1 triệu pixel < 3s. Ảnh test sinh bằng code nên **không có** thư mục `testdata/` (spec đã nêu "không phụ thuộc file ngoài"). Spec chỉnh: ngưỡng góc nhọn khi `--smooth` là **120°** (60° làm hình vuông bị phồng tròn ra ngoài khung); manifest thêm `fill`, `scale`, `max-pixels`. Đơn giản hóa: toạ độ tuyệt đối (`M/L/C`), chưa dùng lệnh tương đối; despeckle dùng 4-liên thông cho mọi nhãn (spec: 8 cho mực). **Chưa kiểm** bằng mắt: mở `.svg` trong trình duyệt/Inkscape, và logo/chữ ký/ảnh chụp thật.
+- [x] GĐ7 xong.
 
 ## Chưa kiểm / để bạn tự thử trên Windows
 
-(điền dần)
+(xem từng mục **Chưa kiểm** ở trên; tổng hợp trong báo cáo cuối)
 
 ## Ghi chú Go (so với PHP/JS)
 
+- **`image/color`: `NRGBA` vs `RGBA`**: `RGBA` đã nhân sẵn alpha (premultiplied), `NRGBA` thì không; muốn lấy màu gốc dùng `color.NRGBAModel.Convert`. ≈ khác nhau giữa `rgba()` CSS và pixel canvas đã trộn alpha.
+- **Blank import `_ "image/png"`**: chỉ chạy `init()` để đăng ký định dạng cho `image.Decode`, ≈ `import "./plugin"` chỉ để side-effect trong JS.
 - **`internal/`**: Go cấm package ngoài module import thư mục này, như `private` cho cả thư mục.
 - **`errors.As`**: ≈ `catch (MyException $e)`; kiểm tra lỗi (có thể đã bị bọc) có phải kiểu `*output.Error` không.
 - **`go:embed`**: nhúng file vào binary lúc build, ≈ bundle JSON vào file build của Vite.
