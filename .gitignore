@@ -1,0 +1,4 @@
+foxkit.exe
+launcher/node_modules/
+launcher/dist/
+launcher/src-tauri/target/

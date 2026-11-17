@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "commands": [
+    {
+      "name": "version", "title": "Phiên bản", "description": "Phiên bản foxkit", "category": "core",
+      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "kv"
+    },
+    {
+      "name": "manifest", "title": "Manifest", "description": "Danh sách lệnh cho launcher", "category": "core",
+      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
+    }
+  ]
+}
