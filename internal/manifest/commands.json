@@ -252,6 +252,21 @@
       "flags": [ { "name": "tree", "type": "bool", "default": false, "label": "Kill cả process con" } ],
       "admin": false, "confirm": "Kill các process này?", "longRunning": false, "dryRun": false, "output": "kv",
       "examples": [ { "cmd": "kill node --tree", "desc": "Kill mọi node.exe cùng process con" } ]
+    },
+    {
+      "name": "which", "title": "Tìm lệnh trong PATH", "description": "Liệt kê mọi bản exe trong PATH, bản nào đang được dùng", "category": "dev",
+      "args": [ { "name": "name", "type": "string", "required": true, "multiple": true, "label": "Tên lệnh" } ],
+      "flags": [ { "name": "version", "type": "bool", "default": false, "label": "Hiện phiên bản" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "which php node composer --version", "desc": "Mọi bản php/node/composer kèm phiên bản" } ]
+    },
+    {
+      "name": "path", "title": "Xem PATH", "description": "Liệt kê PATH dạng danh sách", "category": "dev",
+      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "path check", "title": "Kiểm tra PATH", "description": "Tìm mục PATH không tồn tại, trùng, rỗng", "category": "dev",
+      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table"
     }
   ]
 }
