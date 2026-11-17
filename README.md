@@ -23,7 +23,7 @@ Quy ước chung:
 
 | Nhóm | Lệnh |
 |---|---|
-| Dev | `uuid` `pass` `hash` `enc` `ts` `case` `port` `env` `prune` `todo` `which` `path` `hosts` `json` `jwt` `serve` `proj` `repos` `branches` `lara` `diff` `csv` `fake` `svc` |
+| Dev | `uuid` `pass` `createpw` `hash` `enc` `ts` `case` `port` `env` `prune` `todo` `which` `path` `hosts` `json` `jwt` `serve` `proj` `repos` `branches` `lara` `diff` `csv` `fake` `svc` |
 | Hệ thống | `ps` `kill` `lock` `startup` `disk` `sysinfo` |
 | Mạng | `ip` `dns` `wifi` `http` `tcp` |
 | Đời sống | `size` `dup` `rename` `find` `temp` `sync` `zip` `down` `clip` `svg` |
@@ -51,7 +51,7 @@ cd src-tauri; cargo test          # test Rust
 cd ..; npm run tauri build        # ra bản cài NSIS
 ```
 
-Phím tắt mặc định của ô nhanh là `Ctrl+Alt+Space`, đổi được trong tab Cài đặt.
+Phím tắt mặc định của ô nhanh là `Ctrl+Alt+Space`, đổi được trong tab Cài đặt (nếu trùng app khác, ví dụ Claude, hãy đổi). Tab **Ứng dụng** chọn sẵn lệnh nào hiện khi mở ô nhanh lúc một app đang focus (mặc định không gợi ý gì). Nút **Xóa** xóa một lệnh trong chat, **Xóa chat** xóa cả cuộc.
 
 ## Tài liệu
 

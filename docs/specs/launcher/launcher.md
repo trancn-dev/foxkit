@@ -75,7 +75,7 @@ launcher/
 │   ├── main.ts
 │   ├── App.vue                  # ô lệnh nhanh: ô nhập + gợi ý + luồng hội thoại mini
 │   ├── main/                    # giao diện chính (mục 6.10)
-│   │   ├── MainApp.vue          # khung 4 tab
+│   │   ├── MainApp.vue          # khung 5 tab
 │   │   ├── ChatTab.vue          # chat đầy đủ (cùng luồng với ô lệnh nhanh)
 │   │   ├── CommandsTab.vue      # danh sách lệnh + form + kết quả
 │   │   ├── CommandForm.vue      # form sinh từ args/flags của manifest
@@ -124,7 +124,8 @@ launcher/
   "autostart": true,
   "autoCopy": false,
   "context": true,
-  "folders": []
+  "folders": [],
+  "appHints": []
 }
 ```
 
@@ -132,6 +133,7 @@ launcher/
 - `autoCopy`: `true` thì mỗi lần chạy thành công tự copy kết quả (quy tắc ở mục 7).
 - `context`: `false` thì tắt hẳn việc đọc app/thư mục/clipboard (mục 6.8); `@dir` v.v. báo `CONTEXT_MISSING`.
 - `folders`: các thư mục quét lệnh ngoài (mục 6.9), quản lý bằng `:add` / `:forget`; launcher ghi lại file này khi đổi (giữ nguyên các field khác).
+- `appHints`: gợi ý theo app, mặc định rỗng (= không gợi ý gì). Mỗi phần tử `{ "app": "chrome.exe", "commands": ["http", "dns"] }`; so tên exe không phân biệt hoa thường, thiếu `.exe` thì tự thêm. Sửa ở tab "Ứng dụng" (mục 6.10).
 - `foxkitPath` rỗng thì tìm theo thứ tự: `foxkit.exe` cùng thư mục với launcher (bản cài kèm) → `foxkit.exe` trong `PATH`. Không thấy thì ô lệnh hiện lỗi `FOXKIT_NOT_FOUND` (mục 8).
 
 ### 5.2 Tauri command (Rust → frontend; dùng chung cho cả hai cửa sổ)
@@ -151,7 +153,8 @@ struct RunResult { exit_code: i32, stdout: String, stderr: String }
 #[tauri::command] fn thread_list() -> Vec<ThreadItem>                                      // luồng chat dùng chung (6.2)
 #[tauri::command] fn thread_add(item: ThreadItem) -> u32                                   // trả id; phát sự kiện thread-changed
 #[tauri::command] fn thread_update(id: u32, item: ThreadItem)                              // cập nhật mục (vd Đang chạy → kết quả)
-#[tauri::command] fn thread_clear()
+#[tauri::command] fn thread_remove(id: u32)                                              // xóa đúng một mục khỏi luồng
+#[tauri::command] fn thread_clear()                                                         // xóa cả luồng
 #[tauri::command] fn show_main(app: tauri::AppHandle)                                    // hiện giao diện chính
 #[tauri::command] fn get_context() -> Context                                            // ảnh chụp ngữ cảnh lúc bấm phím (mục 6.8)
 #[tauri::command] fn hide_window(window: tauri::WebviewWindow) -> Result<(), String>
@@ -193,8 +196,8 @@ Theo đúng schema 1 ở [foundation mục 9.1](../core/foundation.md). `load_ma
 ### 6.2 Cửa sổ ô lệnh nhanh (`bar`)
 - `tauri.conf.json`: `decorations: false`, `alwaysOnTop: true`, `skipTaskbar: true`, `resizable: false`, `transparent: false`, rộng 680 px, cao ban đầu ~90 px: dòng mờ `HintBar` (24 px) nằm **phía trên** ô nhập (64 px).
 - Hiện: **chụp ngữ cảnh trước** (mục 6.8, trước khi cửa sổ launcher cướp focus), rồi đặt ở giữa ngang, cách mép trên 25% chiều cao của **màn hình đang có chuột**, `show()` + `set_focus()`, chọn toàn bộ chữ cũ trong ô (gõ đè được ngay).
-- Có gợi ý hoặc luồng hội thoại thì tăng chiều cao theo nội dung, tối đa 480 px, phần thừa cuộn.
-- **Luồng chat dùng chung** (`thread.ts`): ô nhanh và tab Chat của giao diện chính là **hai cách xem cùng một luồng**. Luồng nằm trong state của Rust (`Mutex<Vec<ThreadItem>>`), mỗi thay đổi phát sự kiện `thread-changed` để cả hai cửa sổ cập nhật. Mỗi mục gồm dòng lệnh đã gõ (bấm vào thì điền lại vào ô nhập) và kết quả (`ResultView`, mục 7) hoặc lỗi; lệnh đang chạy hiện "Đang chạy…". Giữ tối đa 100 mục, cũ nhất tự bị loại; chỉ nằm trong bộ nhớ, mất khi thoát app, **không ghi ra đĩa**. `:clear` xóa luồng. Luồng không dùng để gợi ý lệnh hay gọi lại bằng phím ↑.
+- **Mặc định chỉ có ô nhập** (dòng `HintBar` + ô nhập, ~78 px). Chiều cao luôn bằng đúng nội dung (đo bằng `ResizeObserver`, nên đổi theo ngữ cảnh tải xong, gợi ý hiện/ẩn, kết quả mới), tối đa 480 px; chỉ khi vượt 480 px mới có thanh cuộn. Kết quả của các lần mở trước **không hiện lại** ở ô nhanh (vẫn còn ở tab Chat); chỉ kết quả của lệnh vừa chạy trong lần mở này mới hiện bên dưới để copy.
+- **Luồng chat dùng chung** (`thread.ts`): ô nhanh và tab Chat của giao diện chính là **hai cách xem cùng một luồng**. Luồng nằm trong state của Rust (`Mutex<Vec<ThreadItem>>`), mỗi thay đổi phát sự kiện `thread-changed` để cả hai cửa sổ cập nhật. Mỗi mục gồm dòng lệnh đã gõ (bấm vào thì điền lại vào ô nhập) và kết quả (`ResultView`, mục 7) hoặc lỗi; lệnh đang chạy hiện "Đang chạy…". Giữ tối đa 100 mục, cũ nhất tự bị loại; chỉ nằm trong bộ nhớ, mất khi thoát app, **không ghi ra đĩa**. `:clear` xóa luồng; nút **Xóa** cạnh Copy/JSON chỉ xóa đúng lệnh đó, nút **Xóa chat** ở thanh trên tab Chat xóa cả luồng. Luồng không dùng để gợi ý lệnh hay gọi lại bằng phím ↑.
 - Ô nhanh chỉ hiện **20 mục mới nhất**, mới nhất ở trên, ngay dưới ô nhập. Nút **Mở rộng** (góc phải ô nhập) ẩn ô nhanh và hiện giao diện chính ở tab Chat, giữ nguyên chữ đang gõ dở.
 - Ẩn khi: Esc (lúc không có gợi ý đang mở), cửa sổ mất focus, bấm lại hotkey khi đang hiện. Ẩn **không** dừng lệnh đang chạy; mở lại thấy luồng cũ.
 
@@ -212,7 +215,7 @@ Icon foxkit, click trái = hiện ô lệnh nhanh, double-click = hiện giao di
 1. `tokenize(input)`: tách theo khoảng trắng, nháy kép gom thành một token (`"C:\My Files"`), `\` giữ nguyên (đường dẫn Windows). Thiếu nháy đóng thì coi như đóng ở cuối và báo nhẹ trong dòng gợi ý.
    Nếu token đầu là `foxkit` (người dùng quen gõ như ở terminal) thì bỏ token đó, coi như không có.
 2. `resolve(tokens)`: tìm entry manifest có `name` là **tiền tố dài nhất** của tokens (`hosts add x` khớp `"hosts add"`, không khớp `"hosts"` vì lệnh cha không có entry).
-3. Chưa khớp lệnh nào → danh sách gợi ý lệnh, chấm điểm bằng `fuzzy.ts` trên `name`, `title`, `description` (đã bỏ dấu, chữ thường): khớp đầu `name` > khớp đầu từ > chứa chuỗi con > khớp rời rạc theo thứ tự. Gõ 1–2 ký tự thì chỉ lấy lệnh có `name` bắt đầu bằng chuỗi đó hoặc có từ trong `title` bắt đầu bằng chuỗi đó (gõ `d` ra `dup`, `dns`, `disk`, `diff`, `down`... chứ không ra mọi lệnh có chữ d ở giữa); từ 3 ký tự mới thêm khớp chuỗi con và khớp rời rạc. Tối đa 8 dòng, mỗi dòng: `name` đậm, `title`, `description` mờ. Ô trống thì liệt kê lệnh theo `category`.
+3. Chưa khớp lệnh nào → danh sách gợi ý lệnh, chấm điểm bằng `fuzzy.ts` trên `name`, `title`, `description` (đã bỏ dấu, chữ thường): khớp đầu `name` > khớp đầu từ > chứa chuỗi con > khớp rời rạc theo thứ tự. Gõ 1–2 ký tự thì chỉ lấy lệnh có `name` bắt đầu bằng chuỗi đó hoặc có từ trong `title` bắt đầu bằng chuỗi đó (gõ `d` ra `dup`, `dns`, `disk`, `diff`, `down`... chứ không ra mọi lệnh có chữ d ở giữa); từ 3 ký tự mới thêm khớp chuỗi con và khớp rời rạc. Tối đa 8 dòng, mỗi dòng: `name` đậm, `title`, `description` mờ. **Ô trống thì không liệt kê gì** (giữ ô nhanh gọn), trừ khi app đang focus có cấu hình `appHints` (mục 6.4a).
 4. Đã khớp lệnh → ẩn danh sách lệnh, hiện `ArgHint`: cú pháp sinh từ `args`/`flags`, tô đậm tham số đang gõ, kèm `label`, kiểu, `min–max`. Token đang gõ bắt đầu bằng `--` → gợi ý tên cờ chưa dùng. Tham số kiểu `enum` → gợi ý `options`.
 5. Phím: `↑/↓` chọn gợi ý · `Tab` điền gợi ý đang chọn (thêm dấu cách) · `Enter` chạy (nếu đang mở danh sách lệnh thì điền lệnh trước, Enter lần nữa mới chạy) · `Esc` đóng gợi ý, Esc lần nữa ẩn cửa sổ.
 6. **Ghost text (gợi ý gõ tiếp):** chữ mờ nằm ngay sau con trỏ, chỉ hiện khi con trỏ ở cuối ô. `Tab` hoặc `→` chấp nhận, gõ tiếp thì tự cập nhật. Chỉ gợi ý phần **tiếp theo của cú pháp**, tính bởi `ghost.ts` theo thứ tự ưu tiên:
@@ -230,10 +233,14 @@ Icon foxkit, click trái = hiện ô lệnh nhanh, double-click = hiện giao di
 
    Giá trị lấy từ ngữ cảnh/clipboard được **ghi cụ thể ra ô** khi nhấn Tab (không để dạng `@dir`), để người dùng thấy đúng cái sẽ chạy. Không đoán giá trị cho `string`/`text` tự do.
 7. **Dòng ví dụ mờ phía trên ô nhập (`HintBar`):** bên trái là chip ngữ cảnh (mục 6.8), bên phải là ví dụ:
-   - Chưa khớp lệnh: ví dụ của lệnh đầu danh sách gợi ý; ô trống thì chọn ngẫu nhiên một ví dụ của một lệnh bất kỳ mỗi lần mở cửa sổ.
+   - Chưa khớp lệnh: ví dụ của lệnh đầu danh sách gợi ý; ô trống thì chọn ngẫu nhiên một ví dụ mỗi lần mở cửa sổ, **chỉ trong các lệnh của `appHints`** nếu app đang focus có cấu hình, nếu không thì trong mọi lệnh.
    - Đã khớp lệnh: ví dụ thứ nhất của lệnh (`examples[0]`); nếu người dùng đã gõ khớp một ví dụ thì chuyển sang ví dụ kế tiếp.
    - Hiện dạng `Ví dụ: port 8000 --kill — Kill process đang chiếm port 8000`; `Tab` ở ô trống hoặc khi chỉ có tên lệnh sẽ điền ví dụ vào ô.
    - Lệnh chưa có `examples` trong manifest thì hiện dòng cú pháp sinh từ `args`/`flags` (đã có ở `ArgHint`), không bịa ví dụ.
+
+### 6.4a Gợi ý theo app (`appcmds.ts`)
+- Cấu hình ở `config.appHints` (mục 5.1), sửa ở tab "Ứng dụng". **Mặc định không gợi ý gì**; chỉ khi app đang focus (so tên exe trong ngữ cảnh 6.8) có dòng cấu hình thì ô trống mới hiện sẵn đúng các lệnh đã chọn, theo thứ tự đã chọn (tên lệnh không có trong manifest thì bỏ qua).
+- Khi đã gõ chữ, gợi ý theo cách thường (mục 6.4); `appHints` chỉ ảnh hưởng ô trống và dòng ví dụ mờ.
 
 ### 6.5 Validate trước khi chạy
 Dựa trên manifest, báo lỗi ngay dưới ô nhập (chữ đỏ, không chạy):
@@ -290,7 +297,7 @@ Process chạy bằng `runas` không cho đọc stdout qua pipe, nên ghi ra fil
 **App khác:** chỉ có `app`, `exe`, `title`; `dir`/`files` rỗng (`source: "generic"`). Không đọc cwd của terminal ở v1.
 
 **Dùng ngữ cảnh:**
-- Chip ở `HintBar`: `VS Code · D:\work\foxkit` (cắt giữa nếu dài, tooltip là đường dẫn đầy đủ); chỉ có app thì chỉ hiện tên app; `source: "none"` thì ẩn chip.
+- Chip ở `HintBar` giống nhau ở mọi app: `VS Code · foxkit` (chỉ **tên thư mục cuối**, rộng tối đa 280 px; tooltip là đường dẫn đầy đủ); chỉ có app thì chỉ hiện tên app; `source: "none"` thì ẩn chip.
 - Ghost text tự điền (bảng ở 6.4 bước 6).
 - Placeholder gõ tay, mở rộng ở frontend (`placeholders.ts`) trước khi gửi `args` cho Rust: `@dir` (thư mục hiện tại), `@file` (file đầu tiên đang chọn), `@files` (mở rộng thành nhiều arg, mỗi file một arg), `@clip` (nội dung clipboard, một arg). Ví dụ `size @dir`, `hash @files`, `port @clip`. `@@dir` là chữ `@dir` nguyên văn. Token `@` khác (vd email) giữ nguyên, không báo lỗi.
 - `Context.dir` làm thư mục làm việc khi spawn (mục 6.6 bước 9).
@@ -404,7 +411,7 @@ Giao diện chính **không dùng ngữ cảnh app đang focus** (6.8) vì chín
 
 **Tab "Chat"** (mặc định khi mở app lần đầu; sau đó nhớ tab đang dùng)
 - Cùng luồng với ô nhanh (6.2), hiển thị đầy đủ: mục cũ ở trên, **mới nhất ở dưới**, ô nhập ở đáy như chat thông thường, tự cuộn xuống khi có mục mới. Dùng chung `Composer.vue` nên có đủ gợi ý lệnh, ghost text, ví dụ mờ, Tab/Enter/Shift+Enter, `Ctrl+Shift+C` như ô nhanh (6.4, 6.6, 7); `ResultView` rộng hơn nên bảng không cắt cột.
-- Nút **Thu nhỏ** (góc phải trên): ẩn giao diện chính và hiện ô nhanh ngay tại chỗ, giữ chữ đang gõ dở.
+- Thanh trên: dòng nhắc phím tắt **lấy từ `config.hotkey`** (không ghi cứng), nút **Xóa chat** (xóa cả luồng) và nút **Thu nhỏ** (ẩn giao diện chính và hiện ô nhanh ngay tại chỗ, giữ chữ đang gõ dở).
 - Không có ngữ cảnh app đang focus ở đây (xem đầu mục); `@dir`, `@file`, `@files` báo `CONTEXT_MISSING` với hint "Dùng ô lệnh nhanh bằng phím tắt khi đang ở Explorer/VS Code, hoặc gõ đường dẫn trực tiếp". `@clip` vẫn dùng được (đọc clipboard lúc gửi lệnh).
 
 **Tab "Lệnh"**
@@ -428,6 +435,9 @@ Giao diện chính **không dùng ngữ cảnh app đang focus** (6.8) vì chín
 - Sau mỗi lần quét hiện báo cáo `+ mới / ~ đổi / − không còn` và danh sách file bị bỏ kèm lý do (nội dung `scan.log`). Không tự quét.
 - Hiện quy ước vị trí file `foxkit.json` (6.9) dạng ghi chú ngắn kèm nút "Copy mẫu" (file mẫu trống hợp lệ) để tạo cho tool mới.
 
+**Tab "Ứng dụng"** (mục 6.4a)
+- Danh sách dòng cấu hình `appHints`: ô tên exe (`chrome.exe`, hoặc nút **Chọn .exe…** để lấy tên từ file), các lệnh dạng chip (bấm × để bỏ), ô "thêm lệnh…" có danh sách tên lệnh từ manifest, nút **Xóa** dòng. Nút **Thêm app** thêm dòng trống, **Lưu** ghi `config.json` và áp dụng ngay; dòng thiếu tên app hoặc không có lệnh nào bị bỏ khi lưu. Mặc định chưa có dòng nào.
+
 **Tab "Cài đặt"** — sửa các field của config (5.1), bấm **Lưu** thì ghi `config.json` và áp dụng ngay, không cần khởi động lại:
 - `hotkey`: ô bắt phím (bấm vào rồi nhấn tổ hợp), bắt buộc có ít nhất một phím bổ trợ; tổ hợp có phím Win thì cảnh báo "thường bị Windows giữ". Đăng ký lỗi → báo `HOTKEY_FAILED` tại chỗ và **giữ hotkey cũ**.
 - `autostart`, `autoCopy`, `context`: công tắc.
@@ -443,7 +453,7 @@ Giao diện chính **không dùng ngữ cảnh app đang focus** (6.8) vì chín
 | `text` | `data` là string, hoặc object | String → `pre`; object → JSON định dạng |
 | `stream` | Mỗi dòng NDJSON | Thêm dần từng dòng (dòng parse được thì hiện JSON thu gọn), tự cuộn xuống cuối, giữ tối đa 1000 dòng gần nhất |
 
-- Mỗi kết quả có nút **Copy** (quy tắc bên dưới) và nút **JSON** để xem envelope gốc. Copy ghi bằng plugin `clipboard-manager` (`writeText`), hiện "Đã copy" 1,5 giây.
+- Mỗi kết quả có nút **Copy** (quy tắc bên dưới), nút **JSON** để xem envelope gốc và nút **Xóa** để bỏ riêng lệnh đó khỏi luồng chat. Copy ghi bằng plugin `clipboard-manager` (`writeText`), hiện "Đã copy" 1,5 giây.
 - Phím tắt: `Ctrl+Shift+C` copy kết quả của lệnh vừa chạy (khi ô nhập không có chữ đang được bôi chọn); `Shift+Enter` chạy + copy + ẩn (mục 6.6 bước 8).
 - Config `autoCopy: true` thì lệnh thành công nào cũng tự copy theo cùng quy tắc, trừ lệnh `stream` và lệnh có `dryRun` chưa `--apply`.
 - Quy tắc "copy gì": `data` là string, hoặc `kv` chỉ có một khóa → copy giá trị đó (vd `uuid`, `pass`); `table` → TSV (dán được vào Excel/Sheets); còn lại → JSON `data` đã định dạng.
@@ -534,7 +544,7 @@ npm run tauri dev
 
 - [ ] `npm run test` (vitest) và `cargo test` pass; `cargo clippy` không cảnh báo; `npm run tauri build` ra bản cài.
 - [ ] Hotkey mặc định `Ctrl+Alt+Space` hiện/ẩn ô lệnh; đổi được trong tab Cài đặt (áp dụng ngay) hoặc qua config + Tải lại.
-- [ ] Giao diện chính 4 tab đúng mục 6.10 (mở vào tab Chat), form tab Lệnh sinh hoàn toàn từ manifest; bấm X chỉ ẩn về tray.
+- [ ] Giao diện chính 5 tab đúng mục 6.10 (mở vào tab Chat), form tab Lệnh sinh hoàn toàn từ manifest; bấm X chỉ ẩn về tray.
 - [ ] Ô nhanh và tab Chat là **cùng một luồng chat** (6.2): đồng bộ hai chiều, nút Mở rộng/Thu nhỏ giữ chữ đang gõ, chỉ nằm trong bộ nhớ, `:clear`.
 - [ ] Tray đủ các mục ở 6.3; autostart chạy ngầm không hiện cửa sổ; single-instance đúng.
 - [ ] Gợi ý lệnh, gợi ý cờ, `ArgHint` và validate đúng mục 6.4–6.5, sinh hoàn toàn từ manifest (thêm lệnh mới vào foxkit không phải sửa launcher).

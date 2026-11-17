@@ -50,6 +50,7 @@ Khó: 1 (vài giờ) → 5 (vài ngày, với người mới học Go). Giá tr�
 |---|---|---|---|---|
 | [uuid](specs/dev/uuid.md) | dev | UUID v4/v7 | 1 | ★★ |
 | [pass](specs/dev/pass.md) | dev | Mật khẩu/chuỗi ngẫu nhiên | 1 | ★★ |
+| [createpw](specs/dev/createpw.md) | dev | Mật khẩu 16 ký tự bắt đầu bằng chữ hoa, copy được (thêm sau, ngoài kế hoạch gốc) | 1 | ★★ |
 | [hash](specs/dev/hash.md) | dev | md5/sha*/crc32, kiểm checksum | 2 | ★★ |
 | [enc](specs/dev/enc.md) | dev | base64/hex/url/html | 1 | ★★ |
 | [ts](specs/dev/ts.md) | dev | Timestamp ↔ ngày giờ | 2 | ★★ |
