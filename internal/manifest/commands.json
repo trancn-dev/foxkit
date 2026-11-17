@@ -418,6 +418,34 @@
       ],
       "admin": false, "longRunning": false, "dryRun": true, "output": "table",
       "examples": [ { "cmd": "branches clean --gone", "desc": "Xem trước branch đã merge hoặc mất trên remote" } ]
+    },
+    {
+      "name": "lara log", "title": "Laravel log", "description": "Đọc laravel.log: lọc level, rút gọn trace", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Dự án" } ],
+      "flags": [
+        { "name": "level", "type": "enum", "options": ["debug", "info", "notice", "warning", "error", "critical", "alert", "emergency"], "label": "Level tối thiểu" },
+        { "name": "last", "type": "int", "default": 20, "min": 1, "max": 1000, "label": "Số entry" },
+        { "name": "since", "type": "string", "label": "Trong vòng" },
+        { "name": "grep", "type": "string", "label": "Lọc nội dung" },
+        { "name": "full", "type": "bool", "default": false, "label": "Đủ stack trace" },
+        { "name": "follow", "type": "bool", "default": false, "label": "Theo dõi liên tục" }
+      ],
+      "admin": false, "longRunning": false, "longRunningFlag": "follow", "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "lara log @dir --level error --last 5", "desc": "5 lỗi gần nhất của dự án đang mở" } ]
+    },
+    {
+      "name": "lara key", "title": "Sinh APP_KEY", "description": "Sinh APP_KEY, có thể ghi vào .env", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Dự án" } ],
+      "flags": [
+        { "name": "apply", "type": "bool", "default": false, "label": "Ghi vào .env" },
+        { "name": "force", "type": "bool", "default": false, "label": "Ghi đè key cũ", "confirm": "Đổi APP_KEY sẽ làm mất phiên đăng nhập và dữ liệu đã mã hóa. Tiếp tục?" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "kv"
+    },
+    {
+      "name": "lara clear", "title": "Xóa cache Laravel", "description": "php artisan optimize:clear", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Dự án" } ],
+      "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     }
   ]
 }

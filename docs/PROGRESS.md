@@ -36,7 +36,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] serve (commit "serve"): middleware logging→cors→no-cache→dotfiles→no-list→SPA; test httptest + Run tự nhảy port + Shutdown gọn. Đã thử thật: GET 200, `/.env` → 404, NDJSON `start`/`request`. Spec chỉnh: `Handler(opt, emit)` nhận thêm `emit` để ghi log. **Chưa kiểm tay**: Ctrl+C in sự kiện `stop` (trong test đã kiểm qua ctx), điện thoại cùng Wi-Fi mở được, Windows Firewall.
 - [x] proj (commit "proj"): fixture dựng bằng code trong test (thư mục tạm) thay vì thư mục `testdata/` cố định; Vue 2 → cảnh báo EOL, nuxt không báo thêm vue, packageManager ưu tiên hơn lock file. **Chưa kiểm** trên dự án Laravel thật.
 - [x] repos, branches (commit "repos, branches"): `internal/git` (Run + ParseStatusV2, test 10 ca); repos/branches có test tích hợp với repo tạm (skip nếu không có git). Repo "dubious ownership" của git hiện thành `error` từng repo (không dừng cả lệnh). **Chưa thử** `repos --fetch`, `branches clean --apply` trên repo thật.
-- [ ] GĐ5 còn lại: lara
+- [x] lara log/key/clear (commit "lara"): đọc ngược theo khối 64KB (test file ~100MB < 2s), gộp entry giống nhau, trace rút gọn + đường dẫn tương đối, `--follow` (polling 500ms, phát hiện xoay vòng) test bằng file thật; `lara key --apply` giữ CRLF + backup. Spec chỉnh: `Follow` nhận `resolve func() string` thay `path` (để đổi file khi sang ngày mới, kênh daily). **Chưa kiểm** trên dự án Laravel thật và `lara clear` (máy này không có PHP — test bằng artisan giả).
+- [x] GĐ5 xong.
 - [ ] GĐ6: core/winapi · disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
 
