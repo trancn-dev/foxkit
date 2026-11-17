@@ -262,7 +262,37 @@
     },
     {
       "name": "path", "title": "Xem PATH", "description": "Liệt kê PATH dạng danh sách", "category": "dev",
-      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+      "args": [], "flags": [ { "name": "scope", "type": "enum", "options": ["all", "user", "system"], "default": "all", "label": "Phạm vi" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "path add", "title": "Thêm vào PATH", "description": "Thêm thư mục vào PATH vĩnh viễn", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục" } ],
+      "flags": [
+        { "name": "system", "type": "bool", "default": false, "label": "PATH hệ thống (admin)" },
+        { "name": "first", "type": "bool", "default": false, "label": "Thêm lên đầu" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Ghi" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "kv",
+      "examples": [ { "cmd": "path add C:\\tools\\bin", "desc": "Xem trước thêm C:\\tools\\bin vào PATH user" } ]
+    },
+    {
+      "name": "path rm", "title": "Xóa khỏi PATH", "description": "Xóa thư mục khỏi PATH vĩnh viễn", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục" } ],
+      "flags": [
+        { "name": "system", "type": "bool", "default": false, "label": "PATH hệ thống (admin)" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Ghi" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "kv"
+    },
+    {
+      "name": "path clean", "title": "Dọn PATH", "description": "Xóa mục PATH không tồn tại và trùng", "category": "dev",
+      "args": [],
+      "flags": [
+        { "name": "system", "type": "bool", "default": false, "label": "PATH hệ thống (admin)" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Ghi" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "kv"
     },
     {
       "name": "path check", "title": "Kiểm tra PATH", "description": "Tìm mục PATH không tồn tại, trùng, rỗng", "category": "dev",

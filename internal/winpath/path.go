@@ -14,6 +14,7 @@ type Entry struct {
 	Exists    bool   `json:"exists"`
 	Duplicate bool   `json:"duplicate"`
 	Empty     bool   `json:"empty"`
+	Scope     string `json:"scope,omitempty"` // system | user | process (chỉ có khi đọc được registry)
 }
 
 type Report struct {
@@ -78,4 +79,25 @@ func (r Report) Problematic() []Entry {
 		}
 	}
 	return out
+}
+
+// Label đánh dấu mỗi mục thuộc PATH system, user hay chỉ có trong process (do terminal/IDE thêm). System được ưu tiên khi trùng.
+func (r *Report) Label(user, system string) {
+	sets := map[string]string{}
+	for _, p := range strings.Split(user, ";") {
+		sets[Normalize(Expand(strings.TrimSpace(p)))] = "user"
+	}
+	for _, p := range strings.Split(system, ";") {
+		sets[Normalize(Expand(strings.TrimSpace(p)))] = "system"
+	}
+	for i := range r.Entries {
+		if r.Entries[i].Empty {
+			continue
+		}
+		if sc, ok := sets[Normalize(r.Entries[i].Expanded)]; ok {
+			r.Entries[i].Scope = sc
+		} else {
+			r.Entries[i].Scope = "process"
+		}
+	}
 }
