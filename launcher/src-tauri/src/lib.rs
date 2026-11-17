@@ -1,4 +1,6 @@
 mod config;
+#[allow(dead_code)] // capture_with_budget được nối vào hotkey ở L1.7
+mod context;
 mod elevate;
 mod runner;
 mod thread;
@@ -82,6 +84,18 @@ fn get_config(state: State<'_, AppState>) -> config::Config {
     state.config.lock().unwrap().clone()
 }
 
+/// Ảnh chụp ngữ cảnh lúc bấm hotkey (đặt bởi handler hotkey ở L1.7); `context: false` thì luôn rỗng.
+#[derive(Default)]
+pub struct ContextState(pub Mutex<context::Context>);
+
+#[tauri::command]
+fn get_context(state: State<'_, AppState>, ctx: State<'_, ContextState>) -> context::Context {
+    if !state.config.lock().unwrap().context {
+        return context::Context::none();
+    }
+    ctx.0.lock().unwrap().clone()
+}
+
 #[tauri::command]
 fn thread_list(t: State<'_, Thread>) -> Vec<ThreadItem> {
     t.list()
@@ -113,8 +127,9 @@ pub fn start() {
         .manage(AppState { config: Mutex::new(cfg), dir })
         .manage(Arc::new(Runs::default()))
         .manage(Thread::default())
+        .manage(ContextState::default())
         .invoke_handler(tauri::generate_handler![
-            load_manifest, run, run_stream, stop, run_elevated, get_config, thread_list, thread_add, thread_update, thread_clear
+            load_manifest, run, run_stream, stop, run_elevated, get_config, get_context, thread_list, thread_add, thread_update, thread_clear
         ])
         .setup(|app| {
             let _ = app.get_webview_window("main"); // cửa sổ được dựng sẵn từ tauri.conf.json
