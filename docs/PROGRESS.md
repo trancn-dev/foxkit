@@ -16,7 +16,7 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [ ] L1 launcher (nhiều commit nhỏ). Môi trường: MSVC Build Tools ở `D:\VS\BuildTools`, npm/cargo có mạng. Tauri chọn `2.x` (crate mới nhất trên crates.io là 3.0 alpha, spec chốt v2).
   - [x] L1.0 khung — commit "launcher: scaffold". Windows crate 0.62, sha2 0.11 (cargo chọn bản mới nhất tương thích). Icon tạm sinh từ chữ "fx" (thay bằng icon thật sau).
   - [x] L1.1 lib TS thuần + vitest (47 test pass): tokenize, fuzzy, resolve, ghost, placeholders, form, thread, manifest. `thread.ts` chỉ là phần xem/đồng bộ (`ThreadStore` + backend giả để test), luồng thật nằm ở Rust (L1.2).
-  - [ ] L1.2 Rust: config, runner (run/stream/stop), elevate
+  - [x] L1.2 Rust: config, runner (run/stream/stop), elevate, thread state — 14 test + clippy sạch. Sửa so với spec: lệnh Tauri trả `Result<_, CmdError>` (có code/message/hint) thay vì `String`; `run`/`run_stream` nhận thêm `exec: Option<ExecSpec>` để chạy lệnh ngoài; hàm vào của lib đổi tên `start()` vì trùng tên lệnh `run`. **Chưa kiểm tay**: UAC thật (`run_elevated`) và Stop của stream — làm ở bước thử tay mục 10.3.
   - [ ] L1.3 Rust: context (focus, Explorer COM, VS Code)
   - [ ] L1.4 Rust: scan (+ schema JSON, trusted, scan-cache)
   - [ ] L1.5 UI ô nhanh (App.vue, Composer, Suggestions, ArgHint, HintBar, ResultView) + thread chung

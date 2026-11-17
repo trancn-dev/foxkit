@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    foxkit_launcher_lib::run()
+    foxkit_launcher_lib::start()
 }
