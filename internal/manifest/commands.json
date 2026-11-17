@@ -389,6 +389,12 @@
       ],
       "admin": false, "longRunning": true, "dryRun": false, "output": "stream",
       "examples": [ { "cmd": "serve dist --spa --open", "desc": "Chạy bản build Vue (history mode) và mở trình duyệt" } ]
+    },
+    {
+      "name": "proj", "title": "Thông tin dự án", "description": "Nhận diện Laravel/Vue/Node/Go, phiên bản, scripts", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục dự án" } ],
+      "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "proj @dir", "desc": "Thông tin dự án đang mở trong Explorer/VS Code" } ]
     }
   ]
 }
