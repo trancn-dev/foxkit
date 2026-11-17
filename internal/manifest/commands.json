@@ -267,6 +267,39 @@
     {
       "name": "path check", "title": "Kiểm tra PATH", "description": "Tìm mục PATH không tồn tại, trùng, rỗng", "category": "dev",
       "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "hosts list", "title": "Xem hosts", "description": "Liệt kê domain trong file hosts", "category": "dev",
+      "args": [], "flags": [ { "name": "managed", "type": "bool", "default": false, "label": "Chỉ dòng foxkit thêm" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table"
+    },
+    {
+      "name": "hosts add", "title": "Thêm domain local", "description": "Thêm domain vào file hosts", "category": "dev",
+      "args": [ { "name": "domain", "type": "string", "required": true, "multiple": true, "label": "Domain" } ],
+      "flags": [
+        { "name": "ip", "type": "string", "default": "127.0.0.1", "label": "IP" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Ghi file" }
+      ],
+      "admin": true, "longRunning": false, "dryRun": true, "output": "table",
+      "examples": [ { "cmd": "hosts add shop.test api.shop.test", "desc": "Xem trước thêm hai domain vào 127.0.0.1" } ]
+    },
+    {
+      "name": "hosts rm", "title": "Xóa domain local", "description": "Xóa domain khỏi file hosts", "category": "dev",
+      "args": [ { "name": "domain", "type": "string", "required": true, "multiple": true, "label": "Domain" } ],
+      "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Ghi file" } ],
+      "admin": true, "longRunning": false, "dryRun": true, "output": "table"
+    },
+    {
+      "name": "hosts on", "title": "Bật domain local", "description": "Bật lại domain đã tắt trong file hosts", "category": "dev",
+      "args": [ { "name": "domain", "type": "string", "required": true, "multiple": true, "label": "Domain" } ],
+      "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Ghi file" } ],
+      "admin": true, "longRunning": false, "dryRun": true, "output": "table"
+    },
+    {
+      "name": "hosts off", "title": "Tắt domain local", "description": "Tắt (comment) domain trong file hosts", "category": "dev",
+      "args": [ { "name": "domain", "type": "string", "required": true, "multiple": true, "label": "Domain" } ],
+      "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Ghi file" } ],
+      "admin": true, "longRunning": false, "dryRun": true, "output": "table"
     }
   ]
 }

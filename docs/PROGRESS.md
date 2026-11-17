@@ -28,7 +28,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] prune, todo (commit "prune, todo"): prune không đi vào target (SkipDir), vendor chỉ khi có composer.json, xóa được file read-only (Chmod rồi thử lại). todo: regex chỉ nhận tag sau dấu comment, dòng >1MB không lỗi. **Chưa kiểm** trên dự án thật: `.\foxkit prune D:\Projects` (dry-run) rồi `--apply` với một dự án cũ; `.\foxkit todo --author` trong repo git.
 - [x] ps, kill (commit "ps, kill"): ps parser test 2 locale (en/de); kill chặn PID 0/4, chính foxkit + process cha, tên hệ thống; đã thử thật chỉ trên process tạm do tôi tạo. **Chưa thử** (đừng chạy bừa): `kill explorer` (phải bị chặn), `kill --tree` thật, NEED_ADMIN với process của service. Spec chỉnh: `Resolve` trả thêm `failed []Failure` (tên không thấy/bị chặn).
 - [x] which, path (commit "which, path"): `path` vừa là lệnh lá vừa là cha của `check` (test lệch manifest đã coi lệnh có RunE là lệnh lá từ đầu). `which` thêm `winexec.RunCombined` (stdout+stderr, bỏ qua exit code) cho `--version`.
-- [ ] GĐ3 còn lại: hosts · ip · dns · wifi
+- [x] hosts (commit "hosts"): round-trip byte-for-byte (CRLF/BOM), backup `.foxkit.bak`, ghi nguyên tử; thử thật chỉ với `FOXKIT_HOSTS` trỏ file tạm. **Chưa thử trên hosts thật** (cần admin, PowerShell Administrator): `.oxkit hosts add shop.test` (xem trước) rồi `--apply`, `ping shop.test`, `hosts rm shop.test --apply`. Spec chỉnh: `Change` thêm trường `managed`, action `conflict`/`notfound` để cmd map sang lỗi; `File` thêm `FinalNewline`.
+- [ ] GĐ3 còn lại: ip · dns · wifi
 - [ ] GĐ4: json · jwt · http · tcp · serve
 - [ ] GĐ5: proj · lara · repos · branches
 - [ ] GĐ6: core/winapi · disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
