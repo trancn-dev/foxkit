@@ -1,4 +1,8 @@
-# CLAUDE.md — foxkit
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+# foxkit
 
 > Copy file này vào gốc repo `foxkit/`. Claude Code tự đọc nó ở mỗi phiên.
 
@@ -44,3 +48,24 @@ Người phát triển: dev Laravel/Vue 2 đang học Go. Khi giải thích Go, 
 4. Báo cáo từng ô "Tiêu chí hoàn thành" là đạt hay chưa, kèm lệnh "Chạy thử" người dùng nên tự chạy trên Windows.
 5. Nếu thực tế khác spec (API khác tên, hành vi khác), sửa spec trong cùng thay đổi và nói rõ đã sửa gì.
 6. Nếu code người dùng tự viết chưa idiomatic, chỉ ra và sửa kèm một câu giải thích.
+
+## Lệnh hay dùng
+```
+go test ./internal/svgtrace                 # một package
+go test ./internal/svgtrace -run TestRDP -v # một test
+go test ./cmd                               # gồm test chống lệch manifest
+go test -short ./...                        # bỏ test hiệu năng nặng
+cd launcher && npm run test                 # vitest (lib TS)
+cd launcher/src-tauri && cargo test && cargo clippy
+cd launcher && npm run tauri build          # ra bản cài NSIS
+```
+`go test -race` không chạy được trên máy này (không có cgo/gcc).
+
+## Điều cần biết (không thấy ngay khi đọc từng file)
+- `cmd/root.go` tự dò `--json` từ args vì cobra báo lỗi trước khi parse cờ; lỗi kiểm đối số của cobra được quy về exit 2. Lệnh nhiều file (hash, svg) ghi lỗi vào từng item, in kết quả rồi mới trả lỗi để exit 1.
+- `cmd/manifest_test.go` so cờ cobra với `internal/manifest/commands.json`: thêm cờ mà quên manifest là test đỏ. Manifest kiểu `float` chưa có, dùng `string`.
+- Lệnh ghi hệ thống tách plan/apply (rename, prune, sync, branches, hosts, path). hosts có biến `FOXKIT_HOSTS` trỏ file tạm để thử mà không đụng hosts thật.
+- Package trùng tên stdlib thì đổi tên: `syncdir`, `zipx`, `jsonx`, `csvx`, `textcase`, `winpath`. Go 1.27 đã có `uuid` trong stdlib nên không có `internal/uuid`.
+- Launcher (`launcher/`): hai cửa sổ `bar` (Ctrl+Alt+Space mặc định, cấu hình trong `config.rs`) và `main`; thread chat chung giữ trong bộ nhớ Rust; lệnh ngoài đọc từ `foxkit.json` kèm snapshot và hash tin cậy. Logic thuần ở `src/lib/*.ts` (có vitest), phần Win32/COM ở `src-tauri/src/context.rs` chỉ kiểm tay được.
+- `docs/PROGRESS.md` là nhật ký: mỗi lệnh một dòng kèm phần "Chưa kiểm" và ghi chú Go so với PHP/JS. Cập nhật khi xong mục.
+- Ràng buộc an toàn khi làm tự động: không chạy `--apply` hay sửa hosts/PATH/registry/service thật; test dùng thư mục tạm và bản giả.
