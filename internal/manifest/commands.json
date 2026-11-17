@@ -374,6 +374,21 @@
       "flags": [ { "name": "timeout", "type": "string", "default": "3s", "label": "Timeout" } ],
       "admin": false, "longRunning": false, "dryRun": false, "output": "table",
       "examples": [ { "cmd": "tcp localhost:3306 localhost:6379 google.com:443", "desc": "MySQL, Redis và HTTPS có mở không" } ]
+    },
+    {
+      "name": "serve", "title": "Static server", "description": "Chạy web server tĩnh cho thư mục, hỗ trợ SPA", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục" } ],
+      "flags": [
+        { "name": "port", "type": "int", "default": 8080, "min": 0, "max": 65535, "label": "Port" },
+        { "name": "host", "type": "string", "default": "0.0.0.0", "label": "Host" },
+        { "name": "spa", "type": "bool", "default": false, "label": "Chế độ SPA" },
+        { "name": "cors", "type": "bool", "default": false, "label": "Bật CORS" },
+        { "name": "no-cache", "type": "bool", "default": true, "label": "Tắt cache" },
+        { "name": "open", "type": "bool", "default": false, "label": "Mở trình duyệt" },
+        { "name": "list", "type": "bool", "default": false, "label": "Cho liệt kê thư mục" }
+      ],
+      "admin": false, "longRunning": true, "dryRun": false, "output": "stream",
+      "examples": [ { "cmd": "serve dist --spa --open", "desc": "Chạy bản build Vue (history mode) và mở trình duyệt" } ]
     }
   ]
 }
