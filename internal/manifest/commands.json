@@ -446,6 +446,21 @@
       "name": "lara clear", "title": "Xóa cache Laravel", "description": "php artisan optimize:clear", "category": "dev",
       "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Dự án" } ],
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
+    },
+    {
+      "name": "disk", "title": "Ổ đĩa", "description": "Dung lượng các ổ, cảnh báo ổ sắp đầy", "category": "system",
+      "args": [],
+      "flags": [
+        { "name": "all", "type": "bool", "default": false, "label": "Gồm ổ không sẵn sàng" },
+        { "name": "warn", "type": "int", "default": 90, "min": 1, "max": 100, "label": "Ngưỡng cảnh báo %" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "disk --warn 80", "desc": "Cảnh báo ổ đã dùng từ 80%" } ]
+    },
+    {
+      "name": "sysinfo", "title": "Thông tin máy", "description": "Windows, CPU, RAM, uptime", "category": "system",
+      "args": [], "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "sysinfo", "desc": "Windows, CPU, RAM, uptime của máy" } ]
     }
   ]
 }

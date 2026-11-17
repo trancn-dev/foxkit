@@ -39,7 +39,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] lara log/key/clear (commit "lara"): đọc ngược theo khối 64KB (test file ~100MB < 2s), gộp entry giống nhau, trace rút gọn + đường dẫn tương đối, `--follow` (polling 500ms, phát hiện xoay vòng) test bằng file thật; `lara key --apply` giữ CRLF + backup. Spec chỉnh: `Follow` nhận `resolve func() string` thay `path` (để đổi file khi sang ngày mới, kênh daily). **Chưa kiểm** trên dự án Laravel thật và `lara clear` (máy này không có PHP — test bằng artisan giả).
 - [x] GĐ5 xong.
 - [x] core/winapi (commit "winapi"): `golang.org/x/sys` thêm vào theo roadmap mục 5 (được phép từ GĐ6). `IsAdmin`, `ProcessPath`, `Processes` (Toolhelp32, có PPID), `Descendants` (duyệt cây theo PPID); có `winapi_other.go` cho nơi không phải Windows.
-- [ ] GĐ6 còn lại: disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
+- [x] disk, sysinfo (commit "disk, sysinfo"): đã chạy thật — thấy 6 ổ, Windows 11 (ProductName sửa theo build), RAM/uptime; ổ mạng mất kết nối có timeout 3s (**chưa thử** với ổ mạng thật). `disk.Fill` làm tròn 1 chữ số. Test layout `MEMORYSTATUSEX` = 64 byte.
+- [ ] GĐ6 còn lại: path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
 
 ## Chưa kiểm / để bạn tự thử trên Windows
