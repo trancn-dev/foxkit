@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "foxkit-command.schema.json",
+  "title": "foxkit.json — khai báo lệnh ngoài cho foxkit launcher",
+  "type": "object",
+  "required": ["schema", "commands"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": 1 },
+    "commands": { "type": "array", "items": { "$ref": "#/definitions/command" } }
+  },
+  "definitions": {
+    "param": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["string", "text", "int", "bool", "enum", "file", "dir", "list"] },
+        "required": { "type": "boolean" },
+        "default": {},
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "multiple": { "type": "boolean" },
+        "allowDir": { "type": "boolean" },
+        "separator": { "type": "string" },
+        "label": { "type": "string" },
+        "confirm": { "type": "string" }
+      }
+    },
+    "exec": {
+      "type": "object",
+      "required": ["program"],
+      "properties": {
+        "program": { "type": "string", "minLength": 1, "description": "Đường dẫn tuyệt đối/tương đối (tính từ thư mục chứa foxkit.json) hoặc tên trong PATH. Chỉ .exe, .bat, .cmd; script khác chạy qua trình thông dịch + prefix." },
+        "prefix": { "type": "array", "items": { "type": "string" } },
+        "cwd": { "enum": ["file", "context"] },
+        "json": { "type": "boolean" }
+      }
+    },
+    "command": {
+      "type": "object",
+      "required": ["name", "exec"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*( [a-z0-9][a-z0-9-]*)*$" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "enum": ["core", "dev", "life", "system", "network"] },
+        "args": { "type": "array", "items": { "$ref": "#/definitions/param" } },
+        "flags": { "type": "array", "items": { "$ref": "#/definitions/param" } },
+        "admin": { "type": "boolean" },
+        "confirm": { "type": "string" },
+        "longRunning": { "type": "boolean" },
+        "longRunningFlag": { "type": "string" },
+        "dryRun": { "type": "boolean" },
+        "output": { "enum": ["kv", "table", "text", "stream"] },
+        "examples": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "type": "object", "required": ["cmd", "desc"], "properties": { "cmd": { "type": "string" }, "desc": { "type": "string" } } }
+        },
+        "exec": { "$ref": "#/definitions/exec" }
+      }
+    }
+  }
+}
