@@ -38,6 +38,37 @@
         { "cmd": "pass --len 64 --charset hex", "desc": "Chuỗi hex 64 ký tự" },
         { "cmd": "pass --count 3 --no-ambiguous", "desc": "3 mật khẩu, bỏ ký tự dễ nhầm" }
       ]
+    },
+    {
+      "name": "hash", "title": "Tính hash", "description": "Tính md5/sha1/sha256/sha512/crc32 của file hoặc chuỗi", "category": "dev",
+      "args": [ { "name": "file", "type": "file", "required": false, "multiple": true, "label": "File" } ],
+      "flags": [
+        { "name": "algo", "type": "enum", "options": ["md5", "sha1", "sha256", "sha512", "crc32"], "default": "sha256", "label": "Thuật toán" },
+        { "name": "all", "type": "bool", "default": false, "label": "Tất cả thuật toán" },
+        { "name": "text", "type": "string", "label": "Chuỗi" },
+        { "name": "check", "type": "string", "label": "Hash cần so" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [
+        { "cmd": "hash --text abc --all", "desc": "Hash chuỗi bằng mọi thuật toán" },
+        { "cmd": "hash setup.exe --check 9f86d0", "desc": "Kiểm tra checksum file tải về" }
+      ]
+    },
+    {
+      "name": "enc", "title": "Encode / Decode", "description": "base64, base64url, hex, url, html", "category": "dev",
+      "args": [
+        { "name": "mode", "type": "enum", "options": ["base64", "base64url", "hex", "url", "html"], "required": true, "label": "Kiểu" },
+        { "name": "text", "type": "text", "required": false, "label": "Nội dung" }
+      ],
+      "flags": [
+        { "name": "decode", "type": "bool", "default": false, "label": "Decode" },
+        { "name": "file", "type": "file", "label": "Từ file" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "text",
+      "examples": [
+        { "cmd": "enc base64 \"Xin chào\"", "desc": "Mã hóa base64" },
+        { "cmd": "enc base64 -d WGluIGNow6Bv", "desc": "Giải mã base64" }
+      ]
     }
   ]
 }

@@ -5,10 +5,10 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 ## Mục việc
 
 - [x] GĐ0 foundation — 650bf57. Thêm: `Execute` tự dò `--json` trong args vì cobra lỗi trước khi parse cờ; lỗi kiểm đối số của cobra ("unknown command", "accepts ...") quy về exit 2. Test chống lệch đã thử xóa entry rồi hoàn tác.
-- [x] uuid — (hash: commit "uuid, pass"). Spec sửa: stdlib Go 1.27 đã có package `uuid` → bỏ `internal/uuid`, không có `UUID_RANDOM_FAILED`.
-- [x] pass — (cùng commit với uuid). Spec sửa: vòng lặp đảm bảo 4 loại ký tự nâng 100 → 10000 lần (len=4 chỉ ~6% chuỗi đủ loại).
-- [ ] hash
-- [ ] enc
+- [x] uuid — 7dd3c3e. Spec sửa: stdlib Go 1.27 đã có package `uuid` → bỏ `internal/uuid`, không có `UUID_RANDOM_FAILED`.
+- [x] pass — 7dd3c3e (chung commit với uuid; các mục nhỏ gộp commit vì manifest dùng chung một file). Spec sửa: vòng lặp đảm bảo 4 loại ký tự nâng 100 → 10000 lần (len=4 chỉ ~6% chuỗi đủ loại).
+- [x] hash — (commit "hash, enc"). Tiêu chí: vector chuẩn đạt; file lớn >1GB **chưa kiểm** (dùng `io.Copy` nên không nạp RAM) — thử: `.\foxkit hash D:\big.iso`. Thêm: `--check` không khớp in `khớp: false` rồi trả `HASH_MISMATCH`; item lỗi in ra stderr.
+- [x] enc — (cùng commit với hash). `ENC_INPUT_TOO_LARGE` dùng chung `output.InputTooLarge` rồi đổi code.
 - [ ] ts
 - [ ] case
 - [ ] port
