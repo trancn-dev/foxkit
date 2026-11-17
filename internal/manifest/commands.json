@@ -153,6 +153,30 @@
       ],
       "admin": false, "longRunning": false, "dryRun": false, "output": "table",
       "examples": [ { "cmd": "dup D:\\Photos E:\\Backup --ext jpg,png", "desc": "Ảnh trùng giữa hai thư mục" } ]
+    },
+    {
+      "name": "rename", "title": "Đổi tên hàng loạt", "description": "Tìm-thay thế, đổi kiểu chữ, đánh số tên file", "category": "life",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục" } ],
+      "flags": [
+        { "name": "find", "type": "string", "label": "Tìm" },
+        { "name": "replace", "type": "string", "label": "Thay bằng" },
+        { "name": "regex", "type": "bool", "default": false, "label": "Regex" },
+        { "name": "ignore-case", "type": "bool", "default": false, "label": "Không phân biệt hoa thường" },
+        { "name": "with-ext", "type": "bool", "default": false, "label": "Áp dụng cả đuôi file" },
+        { "name": "case", "type": "enum", "options": ["lower", "upper", "slug", "snake", "kebab"], "label": "Đổi kiểu chữ" },
+        { "name": "number", "type": "string", "label": "Mẫu đánh số ({n:3})" },
+        { "name": "sort", "type": "enum", "options": ["name", "date", "size"], "default": "name", "label": "Sắp xếp khi đánh số" },
+        { "name": "start", "type": "int", "default": 1, "label": "Số bắt đầu" },
+        { "name": "ext", "type": "list", "label": "Chỉ đuôi file" },
+        { "name": "recursive", "type": "bool", "default": false, "label": "Gồm thư mục con" },
+        { "name": "dirs", "type": "bool", "default": false, "label": "Đổi tên cả thư mục" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Thực hiện" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "table",
+      "examples": [
+        { "cmd": "rename D:\\Photos\\Trip --find IMG_ --replace trip_", "desc": "Xem trước đổi IMG_ thành trip_" },
+        { "cmd": "rename D:\\Photos\\Trip --number \"DaLat_{n:3}\" --sort date", "desc": "Đánh số theo ngày sửa" }
+      ]
     }
   ]
 }

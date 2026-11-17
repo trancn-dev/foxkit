@@ -23,7 +23,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
   - [x] L1.6 UI giao diện chính 4 tab (Chat, Lệnh + form sinh từ manifest, Thư mục lệnh, Cài đặt); `vite build` ra đủ index.html + main.html, 61 test vitest. Cần Rust L1.7: `save_config`, `check_foxkit`, `show_main`, `show_bar`, `hide_window`, `suspend_autohide`.
   - [x] L1.7 lib.rs + app.rs: tray (đủ mục 6.3), hotkey (đổi nóng, HOTKEY_FAILED giữ cấu hình cũ), single-instance, autostart (--hidden), hai cửa sổ (X và thu nhỏ → ẩn về tray, ô nhanh ẩn khi mất focus). Mã L1.7 nằm trong commit 9655c43 (bị gộp nhầm vào commit "size, dup"). **Đã kiểm**: cargo test 31 + clippy sạch, vitest 61, npm run tauri build ra bản cài NSIS 5,4 MB; smoke test bản release (APPDATA tạm, autostart=false): chạy được, bản thứ hai tự thoát (single-instance), tạo config.json. **Chưa kiểm tay** (mục 10.3 launcher.md): hotkey hiện/ẩn ô nhanh, gợi ý/ghost, chạy lệnh thật trong UI, Stop stream, UAC (#7), Explorer/VS Code (#12-15), copy (#16), thư mục lệnh ngoài (#19-20), tab Chat/Lệnh/Cài đặt (#21-24). Lưu ý: chạy launcher bình thường sẽ ghi autostart vào HKCU Run vì config mặc định autostart=true (tắt ở tab Cài đặt).
 - [x] size, dup (commit "size, dup"): size theo spec (semaphore + min-heap); dup 3 tầng + worker pool. `go test -race` **chưa chạy được** (máy không có cgo/gcc) — thử: `set CGO_ENABLED=1; go test -race ./internal/dup` trên máy có gcc. Tiến độ stderr của `size` chưa làm (spec nói "như dup", không bắt buộc). `fsutil.DirSize` đổi sang chữ ký spec `(ctx, root) (DirStat, error)`.
-- [ ] GĐ2 còn lại: rename · find · temp · prune · todo
+- [x] rename (commit "rename"): plan/apply 2 pha + hoàn tác (test inject lỗi pha 2), xung đột không phân biệt hoa thường.
+- [ ] GĐ2 còn lại: find · temp · prune · todo
 - [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi
 - [ ] GĐ4: json · jwt · http · tcp · serve
 - [ ] GĐ5: proj · lara · repos · branches
