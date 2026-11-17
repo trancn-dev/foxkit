@@ -32,7 +32,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] ip, dns (commit "ip, dns"): `ip` không gửi request ra ngoài khi không có --public (PublicIP test bằng httptest); `dns` host chuẩn hóa từ URL, test localhost không cần mạng. **Chưa thử**: `ip --public`, `dns google.com --type all`, `dns --flush` (cần mạng/quyền).
 - [x] wifi (commit "wifi"): parse XML 3 fixture + UTF-16; thư mục tạm luôn xóa (đã kiểm: 0 thư mục foxkit-wifi-* còn lại). Máy này không có card Wi-Fi nên chỉ kiểm được nhánh `WIFI_UNAVAILABLE`; **chưa kiểm** trên máy có Wi-Fi: `.oxkit wifi` (không dán kết quả ra nơi công khai vì có mật khẩu rõ).
 - [x] json, jwt (commit "json, jwt"): vector jwt.io đạt; Pretty/Minify giữ thứ tự key và số lớn. `output.Error` thêm trường `Position`. `readStdin` bỏ BOM UTF-8 (PowerShell 5.1 thêm BOM khi pipe). Lưu ý: PowerShell 5.1 làm mất nháy kép trong `--text '{"a":1}'` khi gọi exe (lỗi của PowerShell, không phải foxkit) — dùng file hoặc stdin.
-- [ ] GĐ4 còn lại: http · tcp · serve
+- [x] http, tcp (commit "http, tcp"): test bằng httptest (redirect, no-follow, timeout, TLS tự ký → HTTP_TLS_FAILED / --insecure OK). tcp: Windows `WSAECONNREFUSED` (10061) khác `syscall.ECONNREFUSED` nên so thủ công (đã kiểm: "từ chối kết nối"). **Chưa thử**: `http google.com`, `http ... --method POST --data` ra Internet.
+- [ ] GĐ4 còn lại: serve
 - [ ] GĐ5: proj · lara · repos · branches
 - [ ] GĐ6: core/winapi · disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg

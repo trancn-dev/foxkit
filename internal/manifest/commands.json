@@ -352,6 +352,28 @@
       "flags": [ { "name": "secret", "type": "string", "label": "Secret (để verify)" } ],
       "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
       "examples": [ { "cmd": "jwt @clip", "desc": "Giải mã token đang copy trong clipboard" } ]
+    },
+    {
+      "name": "http", "title": "Kiểm tra URL", "description": "Status, thời gian, redirect, SSL của một URL", "category": "network",
+      "args": [ { "name": "url", "type": "string", "required": true, "label": "URL" } ],
+      "flags": [
+        { "name": "method", "type": "enum", "options": ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], "default": "GET", "label": "Method" },
+        { "name": "header", "type": "list", "separator": "\n", "label": "Header (mỗi dòng một)" },
+        { "name": "data", "type": "text", "label": "Body" },
+        { "name": "timeout", "type": "string", "default": "10s", "label": "Timeout" },
+        { "name": "no-follow", "type": "bool", "default": false, "label": "Không theo redirect" },
+        { "name": "insecure", "type": "bool", "default": false, "label": "Bỏ kiểm tra SSL" },
+        { "name": "body", "type": "bool", "default": false, "label": "In body" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "http google.com", "desc": "Status, thời gian, SSL của google.com" }, { "cmd": "http https://localhost:8443 --insecure", "desc": "Site local dùng chứng chỉ tự ký" } ]
+    },
+    {
+      "name": "tcp", "title": "Kiểm tra port từ xa", "description": "Kiểm tra host:port có mở không", "category": "network",
+      "args": [ { "name": "target", "type": "string", "required": true, "multiple": true, "label": "host:port" } ],
+      "flags": [ { "name": "timeout", "type": "string", "default": "3s", "label": "Timeout" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "tcp localhost:3306 localhost:6379 google.com:443", "desc": "MySQL, Redis và HTTPS có mở không" } ]
     }
   ]
 }
