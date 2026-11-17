@@ -300,6 +300,28 @@
       "args": [ { "name": "domain", "type": "string", "required": true, "multiple": true, "label": "Domain" } ],
       "flags": [ { "name": "apply", "type": "bool", "default": false, "label": "Ghi file" } ],
       "admin": true, "longRunning": false, "dryRun": true, "output": "table"
+    },
+    {
+      "name": "ip", "title": "Xem IP", "description": "IP LAN và IP public", "category": "network",
+      "args": [],
+      "flags": [
+        { "name": "public", "type": "bool", "default": false, "label": "Lấy IP public" },
+        { "name": "all", "type": "bool", "default": false, "label": "Gồm card ảo" },
+        { "name": "v6", "type": "bool", "default": false, "label": "Gồm IPv6" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "ip --public", "desc": "IP LAN và IP public" } ]
+    },
+    {
+      "name": "dns", "title": "Tra DNS", "description": "Tra bản ghi DNS, xóa cache DNS", "category": "network",
+      "args": [ { "name": "host", "type": "string", "required": false, "label": "Domain" } ],
+      "flags": [
+        { "name": "type", "type": "list", "default": "A,AAAA,CNAME", "label": "Loại bản ghi" },
+        { "name": "server", "type": "string", "label": "DNS server" },
+        { "name": "flush", "type": "bool", "default": false, "label": "Xóa cache DNS" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "dns google.com --type all", "desc": "Mọi loại bản ghi của google.com" }, { "cmd": "dns --flush", "desc": "Xóa cache DNS" } ]
     }
   ]
 }
