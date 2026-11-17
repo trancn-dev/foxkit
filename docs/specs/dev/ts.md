@@ -67,10 +67,10 @@ Text:
 ```
 > foxkit ts 1763287727 --tz Asia/Ho_Chi_Minh
 Unix      1763287727   (ms: 1763287727000)
-Giờ       2026-11-16 17:08:47  Thứ Hai  Asia/Ho_Chi_Minh (+07:00)
-ISO       2026-11-16T17:08:47+07:00
-UTC       2026-11-16T10:08:47Z
-Cách đây  2 giờ trước
+Giờ       2025-11-16 17:08:47  Chủ Nhật  Asia/Ho_Chi_Minh (+07:00)
+ISO       2025-11-16T17:08:47+07:00
+UTC       2025-11-16T10:08:47Z
+Cách đây  1 năm trước
 ```
 JSON: `{ "ok": true, "data": <Info> }`
 

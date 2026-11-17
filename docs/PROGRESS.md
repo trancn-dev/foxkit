@@ -7,10 +7,10 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] GĐ0 foundation — 650bf57. Thêm: `Execute` tự dò `--json` trong args vì cobra lỗi trước khi parse cờ; lỗi kiểm đối số của cobra ("unknown command", "accepts ...") quy về exit 2. Test chống lệch đã thử xóa entry rồi hoàn tác.
 - [x] uuid — 7dd3c3e. Spec sửa: stdlib Go 1.27 đã có package `uuid` → bỏ `internal/uuid`, không có `UUID_RANDOM_FAILED`.
 - [x] pass — 7dd3c3e (chung commit với uuid; các mục nhỏ gộp commit vì manifest dùng chung một file). Spec sửa: vòng lặp đảm bảo 4 loại ký tự nâng 100 → 10000 lần (len=4 chỉ ~6% chuỗi đủ loại).
-- [x] hash — (commit "hash, enc"). Tiêu chí: vector chuẩn đạt; file lớn >1GB **chưa kiểm** (dùng `io.Copy` nên không nạp RAM) — thử: `.\foxkit hash D:\big.iso`. Thêm: `--check` không khớp in `khớp: false` rồi trả `HASH_MISMATCH`; item lỗi in ra stderr.
+- [x] hash — fde3be2. Tiêu chí: vector chuẩn đạt; file lớn >1GB **chưa kiểm** (dùng `io.Copy` nên không nạp RAM) — thử: `.\foxkit hash D:\big.iso`. Thêm: `--check` không khớp in `khớp: false` rồi trả `HASH_MISMATCH`; item lỗi in ra stderr.
 - [x] enc — (cùng commit với hash). `ENC_INPUT_TOO_LARGE` dùng chung `output.InputTooLarge` rồi đổi code.
-- [ ] ts
-- [ ] case
+- [x] ts — (commit "ts, case"). Spec sửa: ví dụ output của `1763287727` là 2025-11-16 (Chủ Nhật), không phải 2026. **Chưa kiểm** trên máy không cài Go: thử copy `foxkit.exe` sang máy khác rồi `foxkit ts 0 --tz Asia/Ho_Chi_Minh` (đã nhúng `time/tzdata`).
+- [x] case — (cùng commit với ts). `kebab` và `slug` khác nhau ở chỗ slug chỉ giữ `a-z0-9`.
 - [ ] port
 - [ ] env
 - [ ] L1 launcher (nhiều commit nhỏ theo mục 4, 5, 6.x, 7, 8)

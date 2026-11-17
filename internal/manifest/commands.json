@@ -69,6 +69,28 @@
         { "cmd": "enc base64 \"Xin chào\"", "desc": "Mã hóa base64" },
         { "cmd": "enc base64 -d WGluIGNow6Bv", "desc": "Giải mã base64" }
       ]
+    },
+    {
+      "name": "ts", "title": "Chuyển timestamp", "description": "Unix timestamp ↔ ngày giờ, nhiều múi giờ", "category": "dev",
+      "args": [ { "name": "value", "type": "string", "required": false, "label": "Timestamp hoặc ngày giờ" } ],
+      "flags": [ { "name": "tz", "type": "string", "default": "Local", "label": "Múi giờ" } ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [
+        { "cmd": "ts 1763287727 --tz Asia/Ho_Chi_Minh", "desc": "Timestamp sang giờ Việt Nam" },
+        { "cmd": "ts \"2026-11-16 19:08:47\"", "desc": "Ngày giờ sang timestamp" }
+      ]
+    },
+    {
+      "name": "case", "title": "Đổi kiểu chữ", "description": "camel, snake, kebab, studly, slug tiếng Việt...", "category": "dev",
+      "args": [
+        { "name": "mode", "type": "enum", "options": ["all", "camel", "snake", "kebab", "studly", "title", "upper", "lower", "slug", "constant"], "required": true, "label": "Kiểu" },
+        { "name": "text", "type": "string", "required": true, "label": "Chuỗi" }
+      ],
+      "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [
+        { "cmd": "case slug \"Đơn hàng mới\"", "desc": "Slug bỏ dấu tiếng Việt" },
+        { "cmd": "case all userName", "desc": "Mọi kiểu một lượt" }
+      ]
     }
   ]
 }
