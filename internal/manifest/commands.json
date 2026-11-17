@@ -478,6 +478,25 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "csv", "title": "CSV", "description": "Xem, lọc, thống kê, đổi CSV ↔ JSON", "category": "dev",
+      "args": [ { "name": "file", "type": "file", "required": true, "label": "File CSV" } ],
+      "flags": [
+        { "name": "delim", "type": "string", "default": "auto", "label": "Dấu phân cách" },
+        { "name": "no-header", "type": "bool", "default": false, "label": "Không có dòng tiêu đề" },
+        { "name": "cols", "type": "list", "label": "Cột" },
+        { "name": "where", "type": "string", "label": "Điều kiện lọc" },
+        { "name": "head", "type": "int", "default": 20, "min": 0, "label": "Số dòng đầu" },
+        { "name": "tail", "type": "int", "default": 0, "min": 0, "label": "Số dòng cuối" },
+        { "name": "stats", "type": "bool", "default": false, "label": "Thống kê cột" },
+        { "name": "to", "type": "enum", "options": ["json", "ndjson", "csv", "tsv"], "label": "Xuất sang" },
+        { "name": "out", "type": "string", "label": "Ghi ra file" },
+        { "name": "force", "type": "bool", "default": false, "label": "Ghi đè file --out" },
+        { "name": "typed", "type": "bool", "default": false, "label": "JSON: số/bool thành kiểu thật" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "csv users.csv --where \"city=Hà Nội\" --cols name,email", "desc": "Lọc theo thành phố, chỉ lấy hai cột" }, { "cmd": "csv export.csv --to json --out export.json", "desc": "Đổi CSV sang JSON" } ]
+    },
+    {
       "name": "fake", "title": "Dữ liệu giả", "description": "Sinh dữ liệu giả tiếng Việt: tên, SĐT, địa chỉ, email...", "category": "dev",
       "args": [ { "name": "field", "type": "string", "required": false, "multiple": true, "label": "Field (name, email, phone...)" } ],
       "flags": [
