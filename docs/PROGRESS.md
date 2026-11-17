@@ -59,6 +59,12 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 
 (xem từng mục **Chưa kiểm** ở trên; tổng hợp trong báo cáo cuối)
 
+### Lần kiểm cuối (2026-11-17, sau svg)
+- `gofmt -l .` rỗng; `go vet ./...` sạch; `go test -count=1 ./...` không package nào lỗi; `go build` OK.
+- vitest: 61/61 pass (2 file). `cargo test`: 31/31 pass.
+- Smoke chỉ-đọc (exit 0): uuid, pass, ts now, disk, sysinfo, which go, ps --json, path check, hosts, startup, svc, ip, size, todo, proj, diff, manifest --json. `port` không đối số → exit 2 (đúng spec: sai tham số).
+- Vẫn **chưa** chạy: mọi lệnh `--apply` trên máy thật (theo ràng buộc an toàn), `go test -race`, mở `.svg` bằng trình duyệt.
+
 ## Ghi chú Go (so với PHP/JS)
 
 - **`image/color`: `NRGBA` vs `RGBA`**: `RGBA` đã nhân sẵn alpha (premultiplied), `NRGBA` thì không; muốn lấy màu gốc dùng `color.NRGBAModel.Convert`. ≈ khác nhau giữa `rgba()` CSS và pixel canvas đã trộn alpha.
