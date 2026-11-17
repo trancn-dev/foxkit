@@ -1,5 +1,5 @@
+mod app;
 mod config;
-#[allow(dead_code)] // capture_with_budget được nối vào hotkey ở L1.7
 mod context;
 mod elevate;
 mod runner;
@@ -11,7 +11,7 @@ use std::collections::HashSet;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use tauri::ipc::Channel;
-use tauri::{AppHandle, Emitter, Manager, State};
+use tauri::{AppHandle, Emitter, State};
 use thread::{Thread, ThreadItem};
 
 /// State chung của app.
@@ -240,22 +240,88 @@ fn thread_clear(app: AppHandle, t: State<'_, Thread>) {
     let _ = app.emit("thread-changed", ());
 }
 
+#[tauri::command]
+fn hide_window(app: AppHandle) {
+    app::hide_bar(&app);
+}
+
+#[tauri::command]
+fn show_main(app: AppHandle, tab: Option<String>) {
+    app::show_main(&app, tab.as_deref().unwrap_or("chat"));
+}
+
+#[tauri::command]
+fn show_bar(app: AppHandle) {
+    app::show_bar(&app, false);
+}
+
+/// Tạm tắt "ẩn khi mất focus" trong lúc mở hộp thoại chọn thư mục/file.
+#[tauri::command]
+fn suspend_autohide(ui: State<'_, app::Ui>, on: bool) {
+    ui.suspend_autohide.store(on, std::sync::atomic::Ordering::SeqCst);
+}
+
+/// Lưu config và áp dụng ngay (hotkey, autostart). Hotkey lỗi → HOTKEY_FAILED và giữ cấu hình cũ.
+#[tauri::command]
+fn save_config(app: AppHandle, state: State<'_, AppState>, cfg: config::Config) -> Result<(), CmdError> {
+    app::apply_hotkey(&app, &cfg.hotkey)?;
+    config::save(&state.dir, &cfg).map_err(|e| CmdError::new("CONFIG_FAILED", format!("Không ghi được config.json: {e}"), ""))?;
+    *state.config.lock().unwrap() = cfg.clone();
+    app::sync_autostart(&app, cfg.autostart);
+    let _ = app.emit("reload", ()); // cửa sổ chưa mở thì bỏ qua
+    Ok(())
+}
+
+/// Chạy `foxkit version` với đường dẫn đang nhập (chưa lưu) để kiểm đúng chưa.
+#[tauri::command]
+async fn check_foxkit(path: String) -> Result<String, CmdError> {
+    let exe_dir = std::env::current_exe().ok().and_then(|p| p.parent().map(PathBuf::from));
+    let found = config::find_foxkit(&path, exe_dir.as_deref());
+    let res = tauri::async_runtime::spawn_blocking(move || runner::run_blocking(found.as_deref(), &["version".into()], None, None))
+        .await
+        .map_err(|e| CmdError::new("SPAWN_FAILED", e.to_string(), ""))??;
+    Ok(res.stdout.trim().to_string())
+}
+
 pub fn start() {
     let dir = config::data_dir();
-    let (cfg, _warning) = config::load(&dir);
-    tauri::Builder::default()
+    let (cfg, warning) = config::load(&dir);
+    let hotkey_plugin = tauri_plugin_global_shortcut::Builder::new()
+        .with_handler(|app, _shortcut, event| {
+            if event.state == tauri_plugin_global_shortcut::ShortcutState::Pressed {
+                app::toggle_bar(app);
+            }
+        })
+        .build();
+    let built = tauri::Builder::default()
+        // single-instance phải đứng đầu: bản chạy lần 2 làm bản cũ hiện giao diện chính rồi tự thoát
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| app::show_main(app, "chat")))
+        .plugin(hotkey_plugin)
+        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec!["--hidden"])))
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_dialog::init())
         .manage(AppState { config: Mutex::new(cfg), dir })
         .manage(Arc::new(Runs::default()))
         .manage(Thread::default())
         .manage(ContextState::default())
+        .manage(app::Ui::default())
         .invoke_handler(tauri::generate_handler![
             load_manifest, run, run_stream, stop, run_elevated, get_config, get_context, thread_list, thread_add, thread_update, thread_clear,
-            scan, add_folder, forget_folder, folders_info, scan_log, trust_check, trust_allow
+            scan, add_folder, forget_folder, folders_info, scan_log, trust_check, trust_allow,
+            hide_window, show_main, show_bar, suspend_autohide, save_config, check_foxkit
         ])
-        .setup(|app| {
-            let _ = app.get_webview_window("main"); // cửa sổ được dựng sẵn từ tauri.conf.json
+        .setup(move |app| {
+            app::setup(app.handle(), warning)?;
             Ok(())
         })
-        .run(tauri::generate_context!())
-        .expect("lỗi khi chạy foxkit launcher");
+        .build(tauri::generate_context!())
+        .expect("lỗi khi dựng foxkit launcher");
+    built.run(|_app, event| {
+        // đóng hết cửa sổ không được thoát app: chỉ "Thoát" ở tray (app.exit(0), code = Some) mới thoát
+        if let tauri::RunEvent::ExitRequested { api, code, .. } = event {
+            if code.is_none() {
+                api.prevent_exit();
+            }
+        }
+    });
 }

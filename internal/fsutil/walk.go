@@ -1,6 +1,7 @@
 package fsutil
 
 import (
+	"context"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -17,26 +18,64 @@ func IsSkipDir(name string, skip []string) bool {
 	return false
 }
 
-// DirSize cộng dung lượng mọi file thường dưới root. Lỗi từng mục (không đủ quyền...) được bỏ qua và đếm vào skipped.
-func DirSize(root string) (size int64, files int, skipped int) {
-	_ = filepath.WalkDir(root, func(p string, d fs.DirEntry, err error) error { // callback luôn trả nil, lỗi từng mục đã đếm vào skipped
+// Exists: đường dẫn có tồn tại không.
+func Exists(p string) bool { _, err := os.Stat(p); return err == nil }
+
+// IsDir: p có phải thư mục không.
+func IsDir(p string) bool {
+	st, err := os.Stat(p)
+	return err == nil && st.IsDir()
+}
+
+// Skippable: symlink/junction/irregular — không đi theo, không tính dung lượng.
+func Skippable(d fs.DirEntry) bool {
+	return d.Type()&(fs.ModeSymlink|fs.ModeIrregular) != 0
+}
+
+type DirStat struct {
+	Bytes  int64
+	Files  int
+	Dirs   int
+	Denied int
+}
+
+// DirSize cộng dung lượng mọi file thường dưới root. Lỗi quyền từng mục → Denied++ và đi tiếp.
+// Chỉ trả error khi ctx bị hủy.
+func DirSize(ctx context.Context, root string) (DirStat, error) {
+	var st DirStat
+	err := filepath.WalkDir(root, func(p string, d fs.DirEntry, err error) error {
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
 		if err != nil {
-			skipped++
+			st.Denied++
+			if d != nil && d.IsDir() {
+				return fs.SkipDir
+			}
 			return nil
 		}
-		if d.Type().IsRegular() {
+		switch {
+		case Skippable(d):
+			if d.IsDir() {
+				return fs.SkipDir
+			}
+		case d.IsDir():
+			if p != root {
+				st.Dirs++
+			}
+		case d.Type().IsRegular():
 			info, err := d.Info()
 			if err != nil {
-				skipped++
+				st.Denied++
 				return nil
 			}
-			size += info.Size()
-			files++
+			st.Bytes += info.Size()
+			st.Files++
 		}
 		return nil
 	})
-	return
+	if ctx.Err() != nil {
+		return st, ctx.Err()
+	}
+	return st, err
 }
-
-// Exists: đường dẫn có tồn tại không.
-func Exists(p string) bool { _, err := os.Stat(p); return err == nil }

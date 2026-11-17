@@ -128,6 +128,31 @@
       ],
       "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
       "examples": [ { "cmd": "env get DB_PASSWORD --show", "desc": "Đọc giá trị bí mật (không che)" } ]
+    },
+    {
+      "name": "size", "title": "Dung lượng thư mục", "description": "Thư mục/file nào chiếm nhiều dung lượng nhất", "category": "life",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục" } ],
+      "flags": [
+        { "name": "top", "type": "int", "default": 20, "min": 1, "max": 500, "label": "Số mục" },
+        { "name": "files", "type": "bool", "default": false, "label": "Liệt kê file lớn nhất" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [
+        { "cmd": "size C:\\ --top 10", "desc": "10 thư mục nặng nhất ở ổ C" },
+        { "cmd": "size D:\\Projects --files --top 30", "desc": "30 file lớn nhất trong D:\\Projects" }
+      ]
+    },
+    {
+      "name": "dup", "title": "Tìm file trùng", "description": "Tìm file trùng nội dung, báo dung lượng lãng phí", "category": "life",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "multiple": true, "label": "Thư mục" } ],
+      "flags": [
+        { "name": "min-size", "type": "string", "default": "1KB", "label": "Bỏ file nhỏ hơn" },
+        { "name": "ext", "type": "list", "label": "Chỉ đuôi file (jpg,png)" },
+        { "name": "workers", "type": "int", "min": 1, "max": 64, "label": "Số luồng" },
+        { "name": "include-hidden", "type": "bool", "default": false, "label": "Gồm file ẩn" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "dup D:\\Photos E:\\Backup --ext jpg,png", "desc": "Ảnh trùng giữa hai thư mục" } ]
     }
   ]
 }

@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"context"
 	"errors"
 	"os"
+	"os/signal"
 	"slices"
 	"strings"
 
@@ -53,4 +55,17 @@ func run(args []string) int {
 		return output.Printer{JSON: j, Stdout: rootCmd.OutOrStdout(), Stderr: rootCmd.ErrOrStderr()}.Error(err)
 	}
 	return 0
+}
+
+// cmdContext: context hủy được bằng Ctrl+C (cho các lệnh quét lâu).
+func cmdContext(c *cobra.Command) (context.Context, context.CancelFunc) {
+	return signal.NotifyContext(c.Context(), os.Interrupt)
+}
+
+// canceled quy lỗi context bị hủy về CANCELED; lỗi khác giữ nguyên.
+func canceled(err error) error {
+	if errors.Is(err, context.Canceled) {
+		return output.Canceled()
+	}
+	return err
 }

@@ -65,3 +65,17 @@ func FormatBytes(n int64) string {
 	}
 	return fmt.Sprintf("%.1f %s", f, units[i])
 }
+
+// FormatInt: 12345 → "12.345" (dấu chấm ngăn nhóm nghìn kiểu Việt Nam).
+func FormatInt(n int) string {
+	s := strconv.Itoa(n)
+	neg := strings.HasPrefix(s, "-")
+	s = strings.TrimPrefix(s, "-")
+	for i := len(s) - 3; i > 0; i -= 3 {
+		s = s[:i] + "." + s[i:]
+	}
+	if neg {
+		s = "-" + s
+	}
+	return s
+}

@@ -22,7 +22,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
   - [x] L1.5 UI ô nhanh: Session (điều khiển chung), Composer, Suggestions, ArgHint, HintBar, ResultView, App.vue + interpret/copy (59 test vitest, vue-tsc sạch). Mở rộng nhỏ: copy `uuid`/`pass` ra mỗi giá trị một dòng. **Chưa chạy được trong cửa sổ** cho tới L1.7 (cần `hide_window`, `show_main`, `suspend_autohide`, sự kiện `bar-shown`).
   - [x] L1.6 UI giao diện chính 4 tab (Chat, Lệnh + form sinh từ manifest, Thư mục lệnh, Cài đặt); `vite build` ra đủ index.html + main.html, 61 test vitest. Cần Rust L1.7: `save_config`, `check_foxkit`, `show_main`, `show_bar`, `hide_window`, `suspend_autohide`.
   - [ ] L1.7 lib.rs: tray, hotkey, single-instance, autostart, hai cửa sổ; build `tauri build`
-- [ ] GĐ2: size · dup · rename · find · temp · prune · todo
+- [x] size, dup (commit "size, dup"): size theo spec (semaphore + min-heap); dup 3 tầng + worker pool. `go test -race` **chưa chạy được** (máy không có cgo/gcc) — thử: `set CGO_ENABLED=1; go test -race ./internal/dup` trên máy có gcc. Tiến độ stderr của `size` chưa làm (spec nói "như dup", không bắt buộc). `fsutil.DirSize` đổi sang chữ ký spec `(ctx, root) (DirStat, error)`.
+- [ ] GĐ2 còn lại: rename · find · temp · prune · todo
 - [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi
 - [ ] GĐ4: json · jwt · http · tcp · serve
 - [ ] GĐ5: proj · lara · repos · branches

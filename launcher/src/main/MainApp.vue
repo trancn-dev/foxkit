@@ -46,6 +46,8 @@ onMounted(async () => {
     chat.value?.focus();
   });
   await listen("reload", () => session.reload());
+  // tray "Quét lại thư mục lệnh" = gõ :scan ở cửa sổ chính
+  await listen<string>("run-line", (e) => session.submit(e.payload));
 });
 </script>
 
