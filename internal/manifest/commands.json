@@ -478,6 +478,20 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "fake", "title": "Dữ liệu giả", "description": "Sinh dữ liệu giả tiếng Việt: tên, SĐT, địa chỉ, email...", "category": "dev",
+      "args": [ { "name": "field", "type": "string", "required": false, "multiple": true, "label": "Field (name, email, phone...)" } ],
+      "flags": [
+        { "name": "count", "type": "int", "default": 10, "min": 1, "max": 100000, "label": "Số dòng" },
+        { "name": "format", "type": "enum", "options": ["table", "json", "csv", "ndjson"], "default": "table", "label": "Định dạng" },
+        { "name": "seed", "type": "int", "label": "Seed (lặp lại được)" },
+        { "name": "locale", "type": "enum", "options": ["vi", "en"], "default": "vi", "label": "Ngôn ngữ" },
+        { "name": "bom", "type": "bool", "default": false, "label": "CSV có BOM (cho Excel)" },
+        { "name": "list", "type": "bool", "default": false, "label": "Liệt kê field" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "fake name email phone --count 5", "desc": "5 người giả có tên, email, SĐT" }, { "cmd": "fake name int:18-60 --count 100 --format csv --bom", "desc": "100 dòng CSV mở được bằng Excel" } ]
+    },
+    {
       "name": "lock", "title": "Ai đang giữ file?", "description": "Tìm process đang khóa file/thư mục", "category": "system",
       "args": [ { "name": "path", "type": "file", "allowDir": true, "required": true, "multiple": true, "label": "File hoặc thư mục" } ],
       "flags": [

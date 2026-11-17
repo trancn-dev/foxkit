@@ -46,7 +46,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] lock (commit "lock"): Restart Manager qua LazyDLL, test layout `RM_PROCESS_INFO` = 668 byte, test tự-khóa (mở file trong test → PID của test nằm trong holders; đóng → `[]`) đạt. **Chưa thử** `lock <thư mục dự án thật> --kill` và nhận ra VS Code/node (mục "Chạy thử" của spec).
 - [x] nâng cấp port/ps/kill sang winapi (commit "winapi upgrade"): `port` điền `Path`; `ps` thêm `ppid`, `path` và tên Unicode đúng từ Toolhelp (RAM vẫn từ tasklist); `kill --tree` tự duyệt cây theo PPID (cháu → con → cha) thay `taskkill /T`. JSON cũ giữ nguyên (chỉ thêm field). `kill --tree` thật **chưa thử** (chỉ test logic thứ tự bằng bản giả).
 - [x] GĐ6 xong.
-- [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
+- [x] fake (commit "fake"): `math/rand/v2` PCG theo seed (cùng seed → cùng byte), tên nam không "Thị", nữ không "Văn", email khớp tên trong cùng hàng, 100.000 dòng < 2s (test). Spec chỉnh: `Rows` trả `[]Row` (giữ thứ tự cột, MarshalJSON đúng thứ tự) thay `[]map`; `date`/`datetime` mặc định "5 năm gần nhất" tính theo ngày chạy nên chỉ lặp lại tuyệt đối trong cùng ngày — muốn cố định hãy truyền `date:A..B`.
+- [ ] GĐ7 còn lại: csv · diff · down · zip · sync · svg
 
 ## Chưa kiểm / để bạn tự thử trên Windows
 
