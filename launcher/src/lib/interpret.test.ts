@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import sample from "./testdata/commands.json";
 import { copyForResult, copyText, interpret, type Result } from "./interpret";
+import { combo } from "./hotkey";
 import { normalizeManifest, type Command } from "./manifest";
 
 const cmds = normalizeManifest(sample).commands;
@@ -48,4 +49,17 @@ describe("copy", () => {
     expect(copyForResult(ok({ version: 4, items: ["u1", "u2"] }, "text"))).toBe("u1\nu2");
   });
   it("lỗi/stream không copy", () => expect(copyForResult({ kind: "stream", lines: [], running: false })).toBeNull());
+});
+
+describe("hotkey", () => {
+  const k = (key: string, m: Partial<Record<"ctrlKey" | "altKey" | "shiftKey" | "metaKey", boolean>> = {}) => ({ key, ctrlKey: false, altKey: false, shiftKey: false, metaKey: false, ...m });
+  it("ghép tổ hợp", () => {
+    expect(combo(k(" ", { ctrlKey: true, altKey: true }))).toBe("Ctrl+Alt+Space");
+    expect(combo(k("k", { ctrlKey: true, altKey: true }))).toBe("Ctrl+Alt+K");
+    expect(combo(k("F5", { shiftKey: true }))).toBe("Shift+F5");
+  });
+  it("cần phím bổ trợ, không nhận khi chỉ bấm phím bổ trợ", () => {
+    expect(combo(k("k"))).toBeNull();
+    expect(combo(k("Control", { ctrlKey: true }))).toBeNull();
+  });
 });

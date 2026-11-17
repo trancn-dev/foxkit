@@ -20,7 +20,7 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
   - [x] L1.3 Rust: context.rs — 18 test pass, clippy sạch. Logic thuần (tách tiêu đề VS Code, storage.json, URI) có test; phần Win32/COM (`IShellWindows`, `Folder2::Self_`) **chưa kiểm tay**: mục 10.3 #12-14 (Explorer chọn 2 file, VS Code 2 cửa sổ, Notepad). Ngân sách 200 ms chạy ở thread riêng.
   - [x] L1.4 Rust: scan.rs + `launcher/schema/foxkit-command.schema.json` — 31 test Rust pass, clippy sạch. Validator JSON Schema trong test là bản tối giản tự viết (không thêm crate). Đuôi program cho phép: .exe/.bat/.cmd/.com hoặc không đuôi (`python3.11` có đuôi "11" nên bị từ chối, hãy dùng `python`). Lệnh Tauri thêm: add_folder, forget_folder, folders_info, scan_log, trust_check, trust_allow (ngoài danh sách spec, cần cho `:add`/`:forget`/`:folders` và bước tin cậy).
   - [x] L1.5 UI ô nhanh: Session (điều khiển chung), Composer, Suggestions, ArgHint, HintBar, ResultView, App.vue + interpret/copy (59 test vitest, vue-tsc sạch). Mở rộng nhỏ: copy `uuid`/`pass` ra mỗi giá trị một dòng. **Chưa chạy được trong cửa sổ** cho tới L1.7 (cần `hide_window`, `show_main`, `suspend_autohide`, sự kiện `bar-shown`).
-  - [ ] L1.6 UI giao diện chính 4 tab
+  - [x] L1.6 UI giao diện chính 4 tab (Chat, Lệnh + form sinh từ manifest, Thư mục lệnh, Cài đặt); `vite build` ra đủ index.html + main.html, 61 test vitest. Cần Rust L1.7: `save_config`, `check_foxkit`, `show_main`, `show_bar`, `hide_window`, `suspend_autohide`.
   - [ ] L1.7 lib.rs: tray, hotkey, single-instance, autostart, hai cửa sổ; build `tauri build`
 - [ ] GĐ2: size · dup · rename · find · temp · prune · todo
 - [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi

@@ -10,7 +10,7 @@ import { expand, type ContextError } from "./placeholders";
 import { childrenOf, findCommand, parseLine, syntax, toArgs, type ArgError, type ParsedLine } from "./resolve";
 import { search } from "./fuzzy";
 import { ThreadStore, quickView, type ThreadBackend, type ThreadItem } from "./thread";
-import { tokenize } from "./tokenize";
+import { quoteToken, tokenize } from "./tokenize";
 
 export interface Ctx {
   app: string;
@@ -94,6 +94,8 @@ export class Session {
   error = ref<AppError | null>(null);
   busy = ref<{ runId?: number } | null>(null);
   items = ref<ThreadItem[]>([]);
+  /** Id mục luồng chat của lần chạy gần nhất (form dùng để hiện kết quả ngay dưới). */
+  lastItemId = ref(0);
   private store = new ThreadStore(backend);
 
   /** Cửa sổ chính không có ngữ cảnh app đang focus (launcher.md 6.10). */
@@ -195,6 +197,18 @@ export class Session {
     return this.execute(parsed, line, opts.copyAfter ?? false);
   }
 
+  /** Chạy args đã dựng từ form: parse + xác nhận + dryRun + trust như gõ tay. */
+  async submitArgs(args: string[]): Promise<Submitted> {
+    this.error.value = null;
+    const parsed = parseLine(args, this.commands.value);
+    if (!parsed) return notRun();
+    if (parsed.error) {
+      this.fail(parsed.error);
+      return notRun();
+    }
+    return this.execute(parsed, `foxkit ${args.map(quoteToken).join(" ")}`, false);
+  }
+
   private contextError(e: ContextError): AppError {
     if (this.windowKind === "main" && e.message.includes("thư mục")) return { ...e, hint: "Dùng ô lệnh nhanh bằng phím tắt khi đang ở Explorer/VS Code, hoặc gõ đường dẫn trực tiếp" };
     return e;
@@ -229,6 +243,7 @@ export class Session {
   /** Chạy args đã validate, ghi kết quả vào luồng chat. Dùng cho nút Áp dụng / Chạy admin / form. */
   async run(cmd: Command, args: string[], line: string, opts: { preview?: boolean; copyAfter?: boolean; elevated?: boolean } = {}): Promise<{ copied: boolean }> {
     const id = await this.store.begin(line);
+    this.lastItemId.value = id;
     const exec = (cmd as Command & { exec?: ExecInfo }).exec;
     const nameParts = cmd.source === "external" ? cmd.name.split(" ").length : 0;
     const sendArgs = nameParts ? args.slice(nameParts) : args; // lệnh ngoài không nhận tên lệnh

@@ -60,3 +60,36 @@ body { overflow: hidden; }
 .result thead th { border-bottom: 1px solid var(--line); }
 .result.wide .scroll { max-height: none; }
 table.sub { margin: 2px 0; }
+
+/* giao diện chính */
+.main { display: flex; flex-direction: column; height: 100%; }
+.main nav { display: flex; gap: 4px; padding: 8px 12px 0; border-bottom: 1px solid var(--line); }
+.main nav button { padding: 6px 14px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--dim); font: inherit; cursor: pointer; }
+.main nav button.on { color: var(--text); border-color: var(--accent); }
+.main main { flex: 1; min-height: 0; overflow: hidden; }
+.pad { padding: 14px; }
+.small { font-size: 12px; }
+.ok { color: var(--ok); }
+.chat { display: flex; flex-direction: column; height: 100%; }
+.chat-head { display: flex; justify-content: space-between; align-items: center; padding: 6px 14px; border-bottom: 1px solid var(--line); }
+.chat .thread { flex: 1; overflow-y: auto; }
+.chat .composer { border-top: 1px solid var(--line); padding-top: 4px; }
+.chat .empty { padding: 20px 14px; }
+.cmds { display: flex; height: 100%; }
+.cmds aside { width: 260px; flex: none; overflow-y: auto; border-right: 1px solid var(--line); padding: 8px; }
+.cmds section { flex: 1; overflow-y: auto; padding: 14px 18px; }
+.search, .form input, .form select, .form textarea, .settings input:not([type=checkbox]) { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--text); font: inherit; }
+.cat { margin: 10px 0 2px; font-size: 11px; text-transform: uppercase; }
+.cmds .item { padding: 4px 8px; border-radius: 6px; cursor: pointer; }
+.cmds .item.on, .cmds .item:hover { background: var(--panel); }
+.form h2 { margin: 0 0 2px; font-size: 18px; }
+.field-row { margin: 10px 0; }
+.field-row label { display: block; margin-bottom: 3px; }
+.field-row .inline { display: flex; gap: 6px; margin-bottom: 4px; }
+.check { display: flex; align-items: center; gap: 6px; margin: 8px 0; }
+.preview { margin: 12px 0; padding: 6px 8px; background: var(--panel); border-radius: 6px; font-size: 12.5px; }
+.row { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+.list { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.list th, .list td { text-align: left; padding: 5px 10px 5px 0; border-bottom: 1px solid var(--line); }
+.list .actions { white-space: nowrap; }
+.settings { max-width: 640px; }
