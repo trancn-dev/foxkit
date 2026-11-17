@@ -211,6 +211,29 @@
       ],
       "admin": false, "longRunning": false, "dryRun": true, "output": "kv",
       "examples": [ { "cmd": "temp --older 30d", "desc": "Xem trước dọn file tạm cũ hơn 30 ngày" } ]
+    },
+    {
+      "name": "prune", "title": "Dọn node_modules/vendor", "description": "Xóa node_modules, vendor của dự án lâu không dùng", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục dự án" } ],
+      "flags": [
+        { "name": "target", "type": "list", "default": "node_modules,vendor", "label": "Loại thư mục" },
+        { "name": "older", "type": "string", "default": "30d", "label": "Không đụng tới hơn" },
+        { "name": "depth", "type": "int", "default": 4, "min": 1, "max": 10, "label": "Độ sâu" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Xóa thật", "confirm": "Xóa các thư mục đã liệt kê?" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "table",
+      "examples": [ { "cmd": "prune D:\\Projects --older 90d", "desc": "Xem trước dự án không đụng tới hơn 90 ngày" } ]
+    },
+    {
+      "name": "todo", "title": "Liệt kê TODO", "description": "Tìm TODO/FIXME/HACK trong mã nguồn", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục dự án" } ],
+      "flags": [
+        { "name": "tags", "type": "list", "default": "TODO,FIXME,HACK,XXX", "label": "Tag" },
+        { "name": "ext", "type": "list", "label": "Đuôi file" },
+        { "name": "author", "type": "bool", "default": false, "label": "Kèm tác giả (git blame)" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "todo @dir --tags FIXME --author", "desc": "FIXME trong dự án đang mở, kèm tác giả" } ]
     }
   ]
 }

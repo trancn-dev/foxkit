@@ -25,7 +25,7 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] size, dup (commit "size, dup"): size theo spec (semaphore + min-heap); dup 3 tầng + worker pool. `go test -race` **chưa chạy được** (máy không có cgo/gcc) — thử: `set CGO_ENABLED=1; go test -race ./internal/dup` trên máy có gcc. Tiến độ stderr của `size` chưa làm (spec nói "như dup", không bắt buộc). `fsutil.DirSize` đổi sang chữ ký spec `(ctx, root) (DirStat, error)`.
 - [x] rename (commit "rename"): plan/apply 2 pha + hoàn tác (test inject lỗi pha 2), xung đột không phân biệt hoa thường.
 - [x] find, temp (commit "find, temp"): find dừng sớm khi đủ --max (test Scanned<=3); content dùng worker pool + UTF-16 BOM. Một đối số trông như thư mục có thật (có \ / : ) được hiểu là dir thay vì pattern. **Chưa kiểm**: temp --apply trên máy thật với file đang khóa — thử `.\foxkit temp --older 1h --apply` (chỉ xóa mục cũ trong %TEMP%).
-- [ ] GĐ2 còn lại: prune · todo
+- [x] prune, todo (commit "prune, todo"): prune không đi vào target (SkipDir), vendor chỉ khi có composer.json, xóa được file read-only (Chmod rồi thử lại). todo: regex chỉ nhận tag sau dấu comment, dòng >1MB không lỗi. **Chưa kiểm** trên dự án thật: `.\foxkit prune D:\Projects` (dry-run) rồi `--apply` với một dự án cũ; `.\foxkit todo --author` trong repo git.
 - [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi
 - [ ] GĐ4: json · jwt · http · tcp · serve
 - [ ] GĐ5: proj · lara · repos · branches
