@@ -478,6 +478,21 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "down", "title": "Tải file", "description": "Tải file từ URL, tiếp tục khi đứt, kiểm tra checksum", "category": "life",
+      "args": [ { "name": "url", "type": "string", "required": true, "label": "URL" } ],
+      "flags": [
+        { "name": "out", "type": "dir", "label": "Lưu vào" },
+        { "name": "sha256", "type": "string", "label": "SHA-256 mong đợi" },
+        { "name": "header", "type": "list", "separator": "\n", "label": "Header (mỗi dòng một)" },
+        { "name": "resume", "type": "bool", "default": true, "label": "Tiếp tục nếu dở dang" },
+        { "name": "force", "type": "bool", "default": false, "label": "Ghi đè" },
+        { "name": "retries", "type": "int", "default": 3, "min": 0, "max": 10, "label": "Số lần thử lại" },
+        { "name": "timeout", "type": "string", "default": "30s", "label": "Timeout kết nối" }
+      ],
+      "admin": false, "longRunning": true, "dryRun": false, "output": "stream",
+      "examples": [ { "cmd": "down https://example.com/big.zip --out D:\\Downloads", "desc": "Tải file, đứt mạng thì chạy lại để tiếp tục" } ]
+    },
+    {
       "name": "diff", "title": "So sánh", "description": "So sánh hai file hoặc hai thư mục", "category": "dev",
       "args": [
         { "name": "a", "type": "file", "allowDir": true, "required": true, "label": "Bên trái" },
