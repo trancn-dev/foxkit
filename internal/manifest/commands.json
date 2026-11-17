@@ -177,6 +177,40 @@
         { "cmd": "rename D:\\Photos\\Trip --find IMG_ --replace trip_", "desc": "Xem trước đổi IMG_ thành trip_" },
         { "cmd": "rename D:\\Photos\\Trip --number \"DaLat_{n:3}\" --sort date", "desc": "Đánh số theo ngày sửa" }
       ]
+    },
+    {
+      "name": "find", "title": "Tìm file", "description": "Tìm file theo tên, đuôi, kích thước, ngày, nội dung", "category": "life",
+      "args": [
+        { "name": "pattern", "type": "string", "required": false, "label": "Tên (hỗ trợ *, ?)" },
+        { "name": "dir", "type": "dir", "required": false, "label": "Thư mục" }
+      ],
+      "flags": [
+        { "name": "ext", "type": "list", "label": "Đuôi file" },
+        { "name": "type", "type": "enum", "options": ["f", "d", "a"], "default": "f", "label": "Loại" },
+        { "name": "larger", "type": "string", "label": "Lớn hơn" },
+        { "name": "smaller", "type": "string", "label": "Nhỏ hơn" },
+        { "name": "newer", "type": "string", "label": "Sửa trong vòng" },
+        { "name": "older", "type": "string", "label": "Cũ hơn" },
+        { "name": "content", "type": "string", "label": "Chứa nội dung" },
+        { "name": "ignore-case", "type": "bool", "default": true, "label": "Không phân biệt hoa thường" },
+        { "name": "max", "type": "int", "default": 200, "min": 1, "max": 10000, "label": "Tối đa" },
+        { "name": "hidden", "type": "bool", "default": false, "label": "Gồm file ẩn" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [
+        { "cmd": "find \"hop dong\" D:\\Docs --ext pdf", "desc": "PDF có tên 'hợp đồng' (không cần gõ dấu)" },
+        { "cmd": "find \"*.php\" D:\\Projects\\shop --content CouponController", "desc": "Tìm trong nội dung file PHP" }
+      ]
+    },
+    {
+      "name": "temp", "title": "Dọn thư mục tạm", "description": "Xem và dọn file tạm cũ của user", "category": "life",
+      "args": [],
+      "flags": [
+        { "name": "older", "type": "string", "default": "7d", "label": "Cũ hơn" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Xóa thật", "confirm": "Xóa các file tạm cũ?" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "kv",
+      "examples": [ { "cmd": "temp --older 30d", "desc": "Xem trước dọn file tạm cũ hơn 30 ngày" } ]
     }
   ]
 }
