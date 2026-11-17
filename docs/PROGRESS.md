@@ -26,7 +26,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] rename (commit "rename"): plan/apply 2 pha + hoàn tác (test inject lỗi pha 2), xung đột không phân biệt hoa thường.
 - [x] find, temp (commit "find, temp"): find dừng sớm khi đủ --max (test Scanned<=3); content dùng worker pool + UTF-16 BOM. Một đối số trông như thư mục có thật (có \ / : ) được hiểu là dir thay vì pattern. **Chưa kiểm**: temp --apply trên máy thật với file đang khóa — thử `.\foxkit temp --older 1h --apply` (chỉ xóa mục cũ trong %TEMP%).
 - [x] prune, todo (commit "prune, todo"): prune không đi vào target (SkipDir), vendor chỉ khi có composer.json, xóa được file read-only (Chmod rồi thử lại). todo: regex chỉ nhận tag sau dấu comment, dòng >1MB không lỗi. **Chưa kiểm** trên dự án thật: `.\foxkit prune D:\Projects` (dry-run) rồi `--apply` với một dự án cũ; `.\foxkit todo --author` trong repo git.
-- [ ] GĐ3: ps · kill · which · path · hosts · ip · dns · wifi
+- [x] ps, kill (commit "ps, kill"): ps parser test 2 locale (en/de); kill chặn PID 0/4, chính foxkit + process cha, tên hệ thống; đã thử thật chỉ trên process tạm do tôi tạo. **Chưa thử** (đừng chạy bừa): `kill explorer` (phải bị chặn), `kill --tree` thật, NEED_ADMIN với process của service. Spec chỉnh: `Resolve` trả thêm `failed []Failure` (tên không thấy/bị chặn).
+- [ ] GĐ3 còn lại: which · path · hosts · ip · dns · wifi
 - [ ] GĐ4: json · jwt · http · tcp · serve
 - [ ] GĐ5: proj · lara · repos · branches
 - [ ] GĐ6: core/winapi · disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill

@@ -14,6 +14,7 @@ type Proc struct {
 	PID      int
 	Name     string
 	MemBytes int64
+	Session  string
 }
 
 // Tasklist: tasklist /fo csv /nh
@@ -56,7 +57,7 @@ func ParseTasklist(s string) ([]Proc, error) {
 		if err != nil {
 			continue
 		}
-		procs = append(procs, Proc{PID: pid, Name: row[0], MemBytes: parseKB(row[4])})
+		procs = append(procs, Proc{PID: pid, Name: row[0], Session: row[2], MemBytes: parseKB(row[4])})
 	}
 	return procs, nil
 }

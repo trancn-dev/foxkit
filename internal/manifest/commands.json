@@ -234,6 +234,24 @@
       ],
       "admin": false, "longRunning": false, "dryRun": false, "output": "table",
       "examples": [ { "cmd": "todo @dir --tags FIXME --author", "desc": "FIXME trong dự án đang mở, kèm tác giả" } ]
+    },
+    {
+      "name": "ps", "title": "Danh sách process", "description": "Process đang chạy, sắp theo RAM, gộp theo tên", "category": "system",
+      "args": [ { "name": "filter", "type": "string", "required": false, "label": "Lọc theo tên" } ],
+      "flags": [
+        { "name": "sort", "type": "enum", "options": ["mem", "name", "pid"], "default": "mem", "label": "Sắp xếp" },
+        { "name": "top", "type": "int", "default": 30, "min": 0, "label": "Số dòng (0 = tất cả)" },
+        { "name": "group", "type": "bool", "default": false, "label": "Gộp theo tên" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "ps --group --top 10", "desc": "10 nhóm process ăn RAM nhiều nhất" }, { "cmd": "ps node", "desc": "Mọi process node" } ]
+    },
+    {
+      "name": "kill", "title": "Kill process", "description": "Kill process theo PID hoặc tên", "category": "system",
+      "args": [ { "name": "target", "type": "string", "required": true, "multiple": true, "label": "PID hoặc tên" } ],
+      "flags": [ { "name": "tree", "type": "bool", "default": false, "label": "Kill cả process con" } ],
+      "admin": false, "confirm": "Kill các process này?", "longRunning": false, "dryRun": false, "output": "kv",
+      "examples": [ { "cmd": "kill node --tree", "desc": "Kill mọi node.exe cùng process con" } ]
     }
   ]
 }

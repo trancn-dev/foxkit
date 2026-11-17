@@ -7,8 +7,8 @@ func TestParseTasklist(t *testing.T) {
 		name, in string
 		want     []Proc
 	}{
-		{"comma", "\"node.exe\",\"1234\",\"Console\",\"1\",\"412,345 K\"\n", []Proc{{1234, "node.exe", 412345 * 1024}}},
-		{"dot", "\"a.exe\",\"7\",\"Services\",\"0\",\"1.024 K\"\n", []Proc{{7, "a.exe", 1024 * 1024}}},
+		{"comma", "\"node.exe\",\"1234\",\"Console\",\"1\",\"412,345 K\"\n", []Proc{{PID: 1234, Name: "node.exe", MemBytes: 412345 * 1024, Session: "Console"}}},
+		{"dot", "\"a.exe\",\"7\",\"Services\",\"0\",\"1.024 K\"\n", []Proc{{PID: 7, Name: "a.exe", MemBytes: 1024 * 1024, Session: "Services"}}},
 		{"no tasks", "INFO: No tasks are running\n", []Proc{}},
 		{"empty", "", []Proc{}},
 	}
