@@ -313,6 +313,11 @@ export class Session {
     if (id) await invoke("stop", { runId: id });
   }
 
+  /** Xóa toàn bộ luồng chat ở cả hai cửa sổ (cùng việc với lệnh `:clear`). */
+  clearChat(): Promise<void> {
+    return this.store.clear();
+  }
+
   async copyResult(r: Result): Promise<boolean> {
     const text = copyForResult(r);
     if (text === null) return false;
