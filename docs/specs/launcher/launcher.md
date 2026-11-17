@@ -174,6 +174,8 @@ struct Context {
 enum StreamMsg { Line { text: String }, Stderr { text: String }, Exit { code: i32 } }
 ```
 
+> **Đã chỉnh khi triển khai:** các lệnh trả `Result<_, CmdError>` với `CmdError { code, message, hint }` (thay cho `String`) để frontend hiện đúng mã lỗi ở mục 8; `run`/`run_stream` nhận thêm `exec: Option<ExecSpec>` để chạy lệnh ngoài; thêm các lệnh `show_bar`, `suspend_autohide`, `check_foxkit`, `add_folder`, `forget_folder`, `folders_info`, `scan_log`, `trust_check`, `trust_allow`; hàm vào của thư viện là `start()` (tên `run` trùng lệnh `run`).
+
 Frontend không bao giờ ghép chuỗi lệnh: luôn truyền `args` là mảng, Rust đưa thẳng vào `Command::args`, không qua shell (không có lỗ chèn lệnh).
 
 ### 5.3 Kiểu manifest phía TS
