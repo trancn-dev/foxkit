@@ -478,6 +478,22 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "sync", "title": "Đồng bộ thư mục", "description": "Sao lưu một chiều A → B, chỉ chép file mới/đổi", "category": "life",
+      "args": [
+        { "name": "src", "type": "dir", "required": true, "label": "Nguồn" },
+        { "name": "dst", "type": "dir", "required": true, "label": "Đích" }
+      ],
+      "flags": [
+        { "name": "delete", "type": "bool", "default": false, "label": "Dọn file thừa ở đích (vào thùng rác foxkit)" },
+        { "name": "exclude", "type": "list", "label": "Loại" },
+        { "name": "no-default-excludes", "type": "bool", "default": false, "label": "Tắt danh sách loại mặc định" },
+        { "name": "compare", "type": "enum", "options": ["size", "hash"], "default": "size", "label": "Cách so sánh" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Thực hiện", "confirm": "Bắt đầu sao chép?" }
+      ],
+      "admin": false, "longRunning": false, "longRunningFlag": "apply", "dryRun": true, "output": "table",
+      "examples": [ { "cmd": "sync D:\\Projects E:\\Backup\\Projects --exclude node_modules,vendor", "desc": "Xem trước backup, bỏ node_modules và vendor" } ]
+    },
+    {
       "name": "zip pack", "title": "Nén ZIP", "description": "Nén thư mục/file, tự bỏ node_modules, .git, .env", "category": "life",
       "args": [ { "name": "src", "type": "file", "allowDir": true, "required": true, "multiple": true, "label": "Nguồn" } ],
       "flags": [
