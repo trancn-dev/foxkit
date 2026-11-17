@@ -41,3 +41,6 @@ func RunCombined(ctx context.Context, timeout time.Duration, name string, args .
 	}
 	return out, err
 }
+
+// Hide đặt cờ ẩn cửa sổ console cho lệnh con (dùng bởi package khác tự dựng exec.Cmd, vd internal/git).
+func Hide(c *exec.Cmd) { hideWindow(c) }

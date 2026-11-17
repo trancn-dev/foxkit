@@ -395,6 +395,29 @@
       "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Thư mục dự án" } ],
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "kv",
       "examples": [ { "cmd": "proj @dir", "desc": "Thông tin dự án đang mở trong Explorer/VS Code" } ]
+    },
+    {
+      "name": "repos", "title": "Trạng thái các repo", "description": "Repo nào chưa commit, chưa push, bị tụt", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": true, "label": "Thư mục chứa repo" } ],
+      "flags": [
+        { "name": "depth", "type": "int", "default": 3, "min": 1, "max": 6, "label": "Độ sâu" },
+        { "name": "dirty", "type": "bool", "default": false, "label": "Chỉ repo cần chú ý" },
+        { "name": "fetch", "type": "bool", "default": false, "label": "Fetch trước" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "repos D:\\Projects --dirty", "desc": "Repo còn quên commit/push" } ]
+    },
+    {
+      "name": "branches clean", "title": "Dọn branch đã merge", "description": "Xóa branch local đã merge hoặc đã mất trên remote", "category": "dev",
+      "args": [ { "name": "dir", "type": "dir", "required": false, "label": "Repo" } ],
+      "flags": [
+        { "name": "base", "type": "string", "label": "Branch gốc" },
+        { "name": "gone", "type": "bool", "default": false, "label": "Gồm branch đã mất trên remote" },
+        { "name": "keep", "type": "list", "label": "Luôn giữ" },
+        { "name": "apply", "type": "bool", "default": false, "label": "Xóa thật", "confirm": "Xóa các branch đã liệt kê?" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": true, "output": "table",
+      "examples": [ { "cmd": "branches clean --gone", "desc": "Xem trước branch đã merge hoặc mất trên remote" } ]
     }
   ]
 }

@@ -35,7 +35,8 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] http, tcp (commit "http, tcp"): test bằng httptest (redirect, no-follow, timeout, TLS tự ký → HTTP_TLS_FAILED / --insecure OK). tcp: Windows `WSAECONNREFUSED` (10061) khác `syscall.ECONNREFUSED` nên so thủ công (đã kiểm: "từ chối kết nối"). **Chưa thử**: `http google.com`, `http ... --method POST --data` ra Internet.
 - [x] serve (commit "serve"): middleware logging→cors→no-cache→dotfiles→no-list→SPA; test httptest + Run tự nhảy port + Shutdown gọn. Đã thử thật: GET 200, `/.env` → 404, NDJSON `start`/`request`. Spec chỉnh: `Handler(opt, emit)` nhận thêm `emit` để ghi log. **Chưa kiểm tay**: Ctrl+C in sự kiện `stop` (trong test đã kiểm qua ctx), điện thoại cùng Wi-Fi mở được, Windows Firewall.
 - [x] proj (commit "proj"): fixture dựng bằng code trong test (thư mục tạm) thay vì thư mục `testdata/` cố định; Vue 2 → cảnh báo EOL, nuxt không báo thêm vue, packageManager ưu tiên hơn lock file. **Chưa kiểm** trên dự án Laravel thật.
-- [ ] GĐ5 còn lại: repos · branches · lara
+- [x] repos, branches (commit "repos, branches"): `internal/git` (Run + ParseStatusV2, test 10 ca); repos/branches có test tích hợp với repo tạm (skip nếu không có git). Repo "dubious ownership" của git hiện thành `error` từng repo (không dừng cả lệnh). **Chưa thử** `repos --fetch`, `branches clean --apply` trên repo thật.
+- [ ] GĐ5 còn lại: lara
 - [ ] GĐ6: core/winapi · disk · sysinfo · path-edit · startup · svc · clip · lock · nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
 
