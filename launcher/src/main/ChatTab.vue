@@ -31,7 +31,7 @@ defineExpose({ focus: () => composer.value?.focus() });
 <template>
   <div class="chat">
     <div class="chat-head">
-      <span class="dim">Chat lệnh — dùng chung với ô nhanh (Ctrl+Alt+Space)</span>
+      <span class="dim">Chat lệnh — dùng chung với ô nhanh ({{ session.config.value.hotkey }})</span>
       <button class="btn small" @click="shrink">Thu nhỏ</button>
     </div>
     <div ref="list" class="thread full">
