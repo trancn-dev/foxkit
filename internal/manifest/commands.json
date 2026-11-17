@@ -478,6 +478,16 @@
       "flags": [], "admin": false, "longRunning": false, "dryRun": false, "output": "text"
     },
     {
+      "name": "lock", "title": "Ai đang giữ file?", "description": "Tìm process đang khóa file/thư mục", "category": "system",
+      "args": [ { "name": "path", "type": "file", "allowDir": true, "required": true, "multiple": true, "label": "File hoặc thư mục" } ],
+      "flags": [
+        { "name": "kill", "type": "bool", "default": false, "label": "Kill các process này", "confirm": "Kill các process đang giữ file?" },
+        { "name": "max-files", "type": "int", "default": 5000, "min": 1, "max": 50000, "label": "Số file tối đa (thư mục)" }
+      ],
+      "admin": false, "longRunning": false, "dryRun": false, "output": "table",
+      "examples": [ { "cmd": "lock @dir", "desc": "Ai đang giữ thư mục dự án đang mở" } ]
+    },
+    {
       "name": "clip", "title": "Clipboard", "description": "Đọc/ghi clipboard", "category": "life",
       "args": [ { "name": "text", "type": "text", "required": false, "label": "Nội dung (để trống = đọc)" } ],
       "flags": [ { "name": "clear", "type": "bool", "default": false, "label": "Xóa clipboard" } ],

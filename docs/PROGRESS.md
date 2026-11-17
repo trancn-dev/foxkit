@@ -42,7 +42,9 @@ Quy ước: `[x]` xong, `[ ]` chưa làm. Hash ghi ở commit kế tiếp (commi
 - [x] disk, sysinfo (commit "disk, sysinfo"): đã chạy thật — thấy 6 ổ, Windows 11 (ProductName sửa theo build), RAM/uptime; ổ mạng mất kết nối có timeout 3s (**chưa thử** với ổ mạng thật). `disk.Fill` làm tròn 1 chữ số. Test layout `MEMORYSTATUSEX` = 64 byte.
 - [x] path add/rm/clean (commit "path add/rm/clean"): logic thuần có test; ghi registry **giữ EXPAND_SZ** (test trên khóa tạm `HKCUSoftwareoxkit-test`, không đụng `Environment` thật); backup `%LOCALAPPDATA%oxkitbackup`; `path --scope` gắn nhãn user/system/process. Chỉ thử dry-run thật. **Chưa thử --apply** (ghi PATH thật): `.oxkit path add C:	oolsbin` → `--apply` → mở terminal mới → `path rm ... --apply`. System scope cần PowerShell Administrator.
 - [x] startup, svc (commit "startup, svc"): đã đọc thật (startup liệt kê nguồn Run/Startup folder; svc --all liệt kê khi không admin). **Chưa kiểm**: trạng thái bật/tắt của startup khớp Task Manager (đổi một mục rồi so); `svc stop|start|restart` thật (cần admin, chỉ `start` service đã chạy được thử → không đổi gì). Spec chỉnh: `startup.List` trả thêm `warnings []string`.
-- [ ] GĐ6 còn lại: clip · lock · nâng cấp port/ps/kill
+- [x] clip (commit "clip"): dependency `github.com/atotto/clipboard` thêm theo roadmap mục 5; test bằng clipboard giả (CRLF, bỏ newline cuối từ stdin, giới hạn 10MB); test thật chỉ chạy khi `FOXKIT_TEST_CLIPBOARD=1` (vì ghi đè clipboard của bạn — **chưa chạy**). Thử tay: `.oxkit clip "Xin chào đ 🚀"` rồi `.oxkit clip`. Không phân biệt được "đang bận" với "không có chữ" khi đọc lỗi (thư viện không cho biết) nên đọc lỗi → `CLIP_NO_TEXT` kèm gợi ý cả hai khả năng.
+- [x] lock (commit "lock"): Restart Manager qua LazyDLL, test layout `RM_PROCESS_INFO` = 668 byte, test tự-khóa (mở file trong test → PID của test nằm trong holders; đóng → `[]`) đạt. **Chưa thử** `lock <thư mục dự án thật> --kill` và nhận ra VS Code/node (mục "Chạy thử" của spec).
+- [ ] GĐ6 còn lại: nâng cấp port/ps/kill
 - [ ] GĐ7: fake · csv · diff · down · zip · sync · svg
 
 ## Chưa kiểm / để bạn tự thử trên Windows
