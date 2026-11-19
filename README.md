@@ -30,6 +30,28 @@ Quy ước chung:
 
 Chạy `.\foxkit <lệnh> --help` để xem cờ. Spec từng lệnh nằm ở `docs/specs/<nhóm>/<lệnh>.md`.
 
+## Cài đặt môi trường (máy mới)
+
+Chỉ dùng CLI:
+
+```powershell
+winget install GoLang.Go          # cần Go >= 1.27.4 (xem go.mod)
+winget install Git.Git            # các lệnh branches/repos/proj gọi git
+```
+
+Thêm cho launcher (Tauri):
+
+```powershell
+winget install OpenJS.NodeJS.LTS  # Node >= 22.12 (vitest 5; vite 8 chỉ cần 20.19)
+winget install Rustlang.Rustup    # rồi: rustup default stable-x86_64-pc-windows-msvc
+winget install Microsoft.VisualStudio.2022.BuildTools --override "--passive --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+```
+
+- WebView2 Runtime: Windows 11 có sẵn; Windows 10 cài từ trang Microsoft nếu thiếu.
+- Mở terminal mới sau khi cài để PATH có hiệu lực, rồi kiểm tra: `go version`, `node -v`, `rustc -V`, `git --version`.
+- Lần đầu `go build`, `npm install` và `cargo test` cần mạng để tải thư viện.
+- `go test -race` không chạy được nếu không có gcc/cgo; không cần cài.
+
 ## Phát triển
 
 ```powershell
@@ -59,3 +81,4 @@ Phím tắt mặc định của ô nhanh là `Ctrl+Alt+Space`, đổi được t
 - Khung chung (output, exit code, manifest): `docs/specs/core/foundation.md`
 - Launcher: `docs/specs/launcher/launcher.md`
 - Tiến độ, mục chưa kiểm: `docs/PROGRESS.md`
+- Tool nhỏ theo từng app (đề xuất, gợi ý cấu hình tab Ứng dụng): `docs/apps/README.md`
