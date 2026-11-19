@@ -233,6 +233,8 @@ Chạy ngầm ở tray, hotkey mặc định `Ctrl+Alt+Space` (không dùng `Win
 
 ## 8. Backlog (chưa có spec)
 
+> Ý tưởng tool nhỏ theo từng ứng dụng (Chrome, VS Code, Explorer...): xem [apps/README.md](apps/README.md).
+
 | Lệnh | Lý do để sau |
 |---|---|
 | `qr` | Cần dependency sinh QR |

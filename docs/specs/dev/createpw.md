@@ -25,7 +25,7 @@ Text: mỗi mật khẩu một dòng; với `--copy` thêm một dòng ra stderr
 JSON: `{ "ok": true, "data": { "length": 16, "copied": false, "items": ["Y7gvDem9bNd:=X2B"] } }`.
 
 ## 5. Test
-`TestGenerateStartUpper` (600 mẫu, có/không `--no-ambiguous`): đúng độ dài, ký tự đầu A–Z, đủ 4 loại ký tự, không còn ký tự dễ nhầm. `--copy` thật **chưa** có test tự động vì ghi đè clipboard của người dùng.
+`TestGenerateStartUpper` (600 mẫu, có/không `--no-ambiguous`): đúng độ dài, ký tự đầu A–Z, đủ 4 loại ký tự, không còn ký tự dễ nhầm. `cmd/createpw_test.go` kiểm đầu ra, ràng buộc `--len`/`--count` (exit 2) và `--copy` bằng clipboard giả (ghi đúng mật khẩu đầu tiên, lỗi clipboard → exit 1). `--copy` với clipboard thật vẫn **chưa** thử vì ghi đè clipboard của người dùng.
 
 Chạy thử (Windows):
 ```powershell

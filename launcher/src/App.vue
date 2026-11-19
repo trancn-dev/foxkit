@@ -24,11 +24,15 @@ const expand = async () => {
 };
 
 // Cao đúng bằng nội dung (đo ở div bên trong, vì .bar luôn cao bằng cửa sổ nên không co lại được), tối đa 480 px.
-async function fit() {
+let lastHeight = 0;
+/** `force`: đặt lại cỡ dù chiều cao không đổi (mỗi lần cửa sổ hiện); còn lại bỏ qua lần trùng để khỏi gọi IPC thừa. */
+async function fit(force = false) {
   await nextTick();
   const want = (inner.value?.offsetHeight ?? 60) + 2;
   capped.value = want > 480;
   const h = Math.min(480, Math.max(60, want));
+  if (!force && h === lastHeight) return;
+  lastHeight = h;
   await getCurrentWindow().setSize(new LogicalSize(680, h));
 }
 
@@ -40,15 +44,15 @@ onMounted(async () => {
     await session.reload().catch(() => undefined);
     await session.refreshContext();
     composer.value?.focus(true);
-    await fit();
+    await fit(true);
   });
   await listen("reload", () => session.reload());
   await session.onDraft((t) => composer.value?.setText(t));
   // Nội dung đổi cỡ vì bất kỳ lý do gì (ngữ cảnh tải xong, gợi ý hiện, font nạp...) thì co/giãn cửa sổ theo.
   if (inner.value) new ResizeObserver(() => void fit()).observe(inner.value);
-  await fit();
+  await fit(true);
 });
-watch([session.items, session.error, session.prompt, () => composer.value?.getText()], fit, { deep: true });
+watch([session.items, session.error, session.prompt, () => composer.value?.getText()], () => void fit(), { deep: true });
 </script>
 
 <template>
